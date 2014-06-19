@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "description": "A short description of your package",
   "activationEvents": ["linter-clang:toggle"],
-  "repository": "https://github.com/atom/linter-clang",
+  "repository": "https://github.com/AtomLinter/linter-clang",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
