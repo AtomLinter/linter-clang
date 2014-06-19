@@ -1,0 +1,14 @@
+{
+  "name": "linter-clang",
+  "main": "./lib/linter-clang",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "activationEvents": ["linter-clang:toggle"],
+  "repository": "https://github.com/atom/linter-clang",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+  }
+}
