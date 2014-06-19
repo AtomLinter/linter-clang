@@ -10,6 +10,10 @@ Linter package must be installed in order to use this plugin. If Linter is not i
 $ apm install linter-clang
 ```
 
+### Select C / C++ linter
+- C linter, select C Grammar
+- C++ linter, select C++ Grammar
+
 ## Contributing
 If you would like to contribute enhancements or fixes, please do the following:
 
