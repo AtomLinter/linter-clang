@@ -20,14 +20,14 @@ class LinterClang extends Linter
   # A regex pattern used to extract information from the executable's output.
   regex: '.+:(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
-#   constructor: (editor) ->
-#     super(editor)
-#
-#     atom.config.observe 'linter-clang.clangExecutablePath', =>
-#       @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
-#
-#   destroy: ->
-#     atom.config.unobserve 'linter-clang.clangExecutablePath'
+  constructor: (editor) ->
+    super(editor)
+
+    atom.config.observe 'linter-clang.clangExecutablePath', =>
+      @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
+
+  destroy: ->
+    atom.config.unobserve 'linter-clang.clangExecutablePath'
 
   createMessage: (match) ->
     # message might be empty, we have to supply a value
