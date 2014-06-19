@@ -5,7 +5,7 @@ path = require 'path'
 class LinterClang extends Linter
   # The syntax that the linter handles. May be a string or
   # list/tuple of strings. Names should be all lowercase.
-  @syntax: ['source.c++']
+  @syntax: ['source.c++', 'source.c']
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
@@ -22,6 +22,8 @@ class LinterClang extends Linter
 
   constructor: (editor) ->
     super(editor)
+    if editor.getGrammar().name == 'C++'
+      @cmd += ' -x c++';
 
     atom.config.observe 'linter-clang.clangExecutablePath', =>
       @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
