@@ -3,7 +3,7 @@
   "linter-package": true,
   "activationEvents": [],
   "main": "./lib/init",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Lint C / C++ on the fly using clang",
   "repository": "https://github.com/AtomLinter/linter-clang",
   "license": "MIT",
