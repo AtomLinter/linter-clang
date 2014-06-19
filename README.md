@@ -45,6 +45,5 @@ Thank you for helping out!
 - [linter-tslint](https://atom.io/packages/linter-tslint), for JavaScript, using `tslint`
 - [linter-xmllint](https://atom.io/packages/linter-xmllint), for XML, using `xmllint`
 - [linter-shellcheck](https://atom.io/packages/linter-shellcheck), for Bash, using `shellcheck`
-- [linter-clang](https://atom.io/packages/linter-clang), for C / C++, using `clang`
 
 Check out [AtomLinter](https://github.com/AtomLinter)!
