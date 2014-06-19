@@ -1,6 +1,6 @@
 module.exports =
   configDefaults:
-    phpExecutablePath: null
+    clangExecutablePath: null
 
   activate: ->
     console.log 'activate linter-clang'
