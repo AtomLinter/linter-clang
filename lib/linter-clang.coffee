@@ -10,7 +10,8 @@ class LinterClang extends Linter
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
-  cmd: 'clang++ -cc1 -fsyntax-only -fno-caret-diagnostics -fcxx-exceptions -Wall'
+  cmd: 'clang++ -cc1 -fsyntax-only -fno-caret-diagnostics ' +
+       '-fcxx-exceptions -Wall'
 
   executablePath: null
 
@@ -21,7 +22,8 @@ class LinterClang extends Linter
   fileName: ''
 
   # A regex pattern used to extract information from the executable's output.
-  regex: '.+:(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
+  regex: '.+:(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): ' +
+         '(?<message>.*)'
 
   lintFile: (filePath, callback) ->
     # save cmd to tmp
@@ -32,6 +34,8 @@ class LinterClang extends Linter
     for custompath in split
       if custompath.length > 0
         @cmd = "#{@cmd} -I #{custompath}"
+    if atom.config.get 'linter-clang.clangSuppressWarnings'
+      @cmd = "#{@cmd} -w"
     # build the command with arguments to lint the file
     {command, args} = @getCmdAndArgs(filePath)
 
@@ -39,7 +43,8 @@ class LinterClang extends Linter
     if file[file.length - 1] == @grammar
       file = file.replace(".", "\\.")
       file = file.replace("++", "\\+\\+")
-      @regex = file + ':(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
+      @regex = file + ':(?<line>\\d+):.+: .*((?<error>error)|' +
+                      '(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'is node executable: ' + @isNodeExecutable
