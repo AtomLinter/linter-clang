@@ -24,6 +24,14 @@ class LinterClang extends Linter
   regex: '.+:(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
   lintFile: (filePath, callback) ->
+    # save cmd to tmp
+    tmp = @cmd
+    includepath = atom.config.get 'linter-clang.clangIncludePath'
+    split = includepath.split " "
+    # concat includepath
+    for custompath in split
+      if custompath.length > 0
+        @cmd = "#{@cmd} -I #{custompath}"
     # build the command with arguments to lint the file
     {command, args} = @getCmdAndArgs(filePath)
 
@@ -58,6 +66,8 @@ class LinterClang extends Linter
         @processMessage(output, callback)
 
     new Process({command, args, options, stdout, stderr})
+    #restore cmd
+    @cmd = tmp;
 
   constructor: (editor) ->
     super(editor)
@@ -69,10 +79,6 @@ class LinterClang extends Linter
 
     atom.config.observe 'linter-clang.clangExecutablePath', =>
       @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
-    includepath = atom.config.get 'linter-clang.clangIncludePath'
-    split = includepath.split " "
-    for custompath in split
-      @cmd = "#{@cmd} -I #{custompath}"
 
   destroy: ->
     atom.config.unobserve 'linter-clang.clangExecutablePath'
