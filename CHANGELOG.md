@@ -1,3 +1,9 @@
+# v2.6.0
+--------
+
+### Bug Fixes
+* Lister based now on C++11
+
 # v2.5.0
 --------
 
