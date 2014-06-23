@@ -28,6 +28,7 @@ class LinterClang extends Linter
   lintFile: (filePath, callback) ->
     # save cmd to tmp
     tmp = @cmd
+    
     includepath = atom.config.get 'linter-clang.clangIncludePath'
     split = includepath.split " "
     # concat includepath
