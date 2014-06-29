@@ -35,6 +35,7 @@ Thank you for helping out!
 - [linter-php](https://atom.io/packages/linter-php), for PHP using `php -l`
 - [linter-phpcs](https://atom.io/packages/linter-phpcs), for PHP, using `phpc`
 - [linter-phpmd](https://atom.io/packages/linter-phpmd), for PHP, using `phpmd`
+- [linter-pylint](https://atom.io/packages/linter-pylint), for Python, using `pylint`
 - [linter-javac](https://atom.io/packages/linter-javac), for Java, using `javac`
 - [linter-jshint](https://atom.io/packages/linter-jshint), for JavaScript and JSON, using `jshint`
 - [linter-jscs](https://atom.io/packages/linter-jscs), for JavaScript, using `jscs`
@@ -42,8 +43,9 @@ Thank you for helping out!
 - [linter-coffeelint](https://atom.io/packages/linter-coffeelint), for CoffeeScript, using `coffeelint`
 - [linter-csslint](https://atom.io/packages/linter-csslint), for CSS, using `csslint`
 - [linter-rubocop](https://atom.io/packages/linter-rubocop), for Ruby, using `rubocop`
-- [linter-tslint](https://atom.io/packages/linter-tslint), for JavaScript, using `tslint`
+- [linter-tslint](https://atom.io/packages/linter-tslint), for Typescript, using `tslint`
 - [linter-xmllint](https://atom.io/packages/linter-xmllint), for XML, using `xmllint`
 - [linter-shellcheck](https://atom.io/packages/linter-shellcheck), for Bash, using `shellcheck`
+- [linter-scalac](https://atom.io/packages/linter-scalac), for Scala, using `scalac`
 
 Check out [AtomLinter](https://github.com/AtomLinter)!
