@@ -31,6 +31,9 @@ Please note that modifications should follow these coding guidelines:
 
 Thank you for helping out!
 
+## TODO
+When there are errors in other files, sign them on the first line of the current file
+(Example: deleted constructor)
 ## Other Available linters
 - [linter-php](https://atom.io/packages/linter-php), for PHP using `php -l`
 - [linter-phpcs](https://atom.io/packages/linter-phpcs), for PHP, using `phpc`
