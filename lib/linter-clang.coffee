@@ -2,6 +2,7 @@
 linterPath = atom.packages.getLoadedPackage("linter").path
 Linter = require "#{linterPath}/lib/linter"
 path = require 'path'
+ClangFlags = require 'clang-flags'
 
 class LinterClang extends Linter
   # The syntax that the linter handles. May be a string or
@@ -28,7 +29,7 @@ class LinterClang extends Linter
   lintFile: (filePath, callback) ->
     # save cmd to tmp
     tmp = @cmd
-    
+
     includepath = atom.config.get 'linter-clang.clangIncludePath'
     split = includepath.split " "
     # concat includepath
@@ -82,6 +83,8 @@ class LinterClang extends Linter
       @grammar = '+'
     if editor.getGrammar().name == 'C'
       @grammar = 'c'
+
+    @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '
 
     atom.config.observe 'linter-clang.clangExecutablePath', =>
       @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
