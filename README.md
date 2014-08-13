@@ -52,3 +52,6 @@ When there are errors in other files, sign them on the first line of the current
 - [linter-scalac](https://atom.io/packages/linter-scalac), for Scala, using `scalac`
 
 Check out [AtomLinter](https://github.com/AtomLinter)!
+
+## Donation
+[![Share the love!](https://chewbacco-stuff.s3.amazonaws.com/donate.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KXUYS4ARNHCN8)
