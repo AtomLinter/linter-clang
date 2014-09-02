@@ -11,8 +11,8 @@ class LinterClang extends Linter
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
-  cmd: 'clang++ -std=c++11 -fsyntax-only -fno-caret-diagnostics ' +
-       '-fcxx-exceptions -Wall'
+  cmd: 'clang++ -fsyntax-only -fno-caret-diagnostics'
+  isCpp: false
 
   executablePath: null
 
@@ -29,6 +29,11 @@ class LinterClang extends Linter
   lintFile: (filePath, callback) ->
     # save cmd to tmp
     tmp = @cmd
+
+    if @isCpp
+      @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
+    else
+      @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
 
     includepath = atom.config.get 'linter-clang.clangIncludePath'
     split = includepath.split " "
@@ -79,9 +84,11 @@ class LinterClang extends Linter
   constructor: (editor) ->
     super(editor)
     if editor.getGrammar().name == 'C++'
-      @cmd += ' -x c++'
+      @cmd += ' -x c++ -std=c++11 -fcxx-exceptions'
       @grammar = '+'
+      @isCpp = true
     if editor.getGrammar().name == 'C'
+      @cmd += ' -x c'
       @grammar = 'c'
 
     # @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '
