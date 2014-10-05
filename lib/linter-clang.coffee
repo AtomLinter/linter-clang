@@ -11,7 +11,7 @@ class LinterClang extends Linter
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
-  cmd: 'clang++ -fsyntax-only -fno-caret-diagnostics'
+  cmd: '-fsyntax-only -fno-caret-diagnostics'
   isCpp: false
 
   executablePath: null
@@ -84,11 +84,11 @@ class LinterClang extends Linter
   constructor: (editor) ->
     super(editor)
     if editor.getGrammar().name == 'C++'
-      @cmd += ' -x c++ -std=c++11 -fcxx-exceptions'
+      @cmd = 'clang++ ' + @cmd + ' -x c++ -std=c++11 -fcxx-exceptions'
       @grammar = '+'
       @isCpp = true
     if editor.getGrammar().name == 'C'
-      @cmd += ' -x c'
+      @cmd = 'clang ' + @cmd + ' -x c -std=c11 -fexceptions'
       @grammar = 'c'
 
     # @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '
