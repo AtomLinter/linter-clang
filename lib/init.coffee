@@ -1,7 +1,7 @@
 module.exports =
   configDefaults:
     clangExecutablePath: null
-    clangIncludePath: '.'
+    clangIncludePaths: '.'
     clangSuppressWarnings: false
     clangDefaultCFlags: '-Wall'
     clangDefaultCppFlags: '-Wall'
