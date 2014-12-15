@@ -84,11 +84,11 @@ class LinterClang extends Linter
   constructor: (editor) ->
     super(editor)
     if editor.getGrammar().name == 'C++'
-      @cmd = 'clang++ ' + @cmd + ' -x c++ -std=c++11 -fcxx-exceptions'
+      @cmd = "#{atom.config.get 'linter-clang.clangPlusPlusCommand'} "  + @cmd + ' -x c++ -std=c++11 -fcxx-exceptions'
       @grammar = '+'
       @isCpp = true
     if editor.getGrammar().name == 'C'
-      @cmd = 'clang ' + @cmd + ' -x c -std=c11 -fexceptions'
+      @cmd = "#{atom.config.get 'linter-clang.clangCommand'} " + @cmd + ' -x c -std=c11 -fexceptions'
       @grammar = 'c'
 
     # @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '

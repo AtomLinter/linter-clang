@@ -1,5 +1,7 @@
 module.exports =
   configDefaults:
+    clangCommand: 'clang'
+    clangPlusPlusCommand: 'clang++'
     clangExecutablePath: null
     clangIncludePath: '.'
     clangSuppressWarnings: false
