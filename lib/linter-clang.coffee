@@ -2,6 +2,7 @@
 linterPath = atom.packages.getLoadedPackage("linter").path
 Linter = require "#{linterPath}/lib/linter"
 path = require 'path'
+fs = require 'fs'
 # ClangFlags = require 'clang-flags'
 
 class LinterClang extends Linter
@@ -35,8 +36,16 @@ class LinterClang extends Linter
     else
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
 
-    includepath = atom.config.get 'linter-clang.clangIncludePath'
-    split = includepath.split " "
+    includepaths = atom.config.get 'linter-clang.clangIncludePaths'
+
+    # read other include paths from file in project
+    filename = atom.project.getPaths()[0] + '/.linter-clang-includes'
+    if fs.existsSync filename
+        file = fs.readFileSync filename, 'utf8'
+        includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
+
+    split = includepaths.split " "
+
     # concat includepath
     for custompath in split
       if custompath.length > 0

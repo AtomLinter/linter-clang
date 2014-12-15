@@ -14,6 +14,10 @@ $ apm install linter-clang
 - C linter, select C Grammar
 - C++ linter, select C++ Grammar
 
+### Project-specific include paths
+If your project has some extra include directories, put them in a file called ".linter-clang-includes" and list them line by line or seperated by spaces.
+The linter will open the file in those directories and use the specified paths when linting in your project.
+
 ## Contributing
 If you would like to contribute enhancements or fixes, please do the following:
 

@@ -3,7 +3,7 @@ module.exports =
     clangCommand: 'clang'
     clangPlusPlusCommand: 'clang++'
     clangExecutablePath: null
-    clangIncludePath: '.'
+    clangIncludePaths: '.'
     clangSuppressWarnings: false
     clangDefaultCFlags: '-Wall'
     clangDefaultCppFlags: '-Wall'
