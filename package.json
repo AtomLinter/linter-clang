@@ -5,7 +5,10 @@
   "main": "./lib/init",
   "version": "2.8.0",
   "description": "Lint C / C++ on the fly using clang",
-  "repository": "https://github.com/AtomLinter/linter-clang",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AtomLinter/linter-clang"
+  },
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
