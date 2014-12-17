@@ -41,8 +41,8 @@ class LinterClang extends Linter
     # read other include paths from file in project
     filename = atom.project.getPaths()[0] + '/.linter-clang-includes'
     if fs.existsSync filename
-        file = fs.readFileSync filename, 'utf8'
-        includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
+      file = fs.readFileSync filename, 'utf8'
+      includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
 
     split = includepaths.split " "
 
@@ -93,11 +93,13 @@ class LinterClang extends Linter
   constructor: (editor) ->
     super(editor)
     if editor.getGrammar().name == 'C++'
-      @cmd = "#{atom.config.get 'linter-clang.clangPlusPlusCommand'} "  + @cmd + ' -x c++ -std=c++11 -fcxx-exceptions'
+      process = atom.config.get 'linter-clang.clangPlusPlusCommand'
+      @cmd = "#{process} #{@cmd} -x c++ -std=c++11 -fcxx-exceptions"
       @grammar = '+'
       @isCpp = true
     if editor.getGrammar().name == 'C'
-      @cmd = "#{atom.config.get 'linter-clang.clangCommand'} " + @cmd + ' -x c -std=c11 -fexceptions'
+      process = atom.config.get 'linter-clang.clangCommand'
+      @cmd = "#{process} #{@cmd}  -x c -std=c11 -fexceptions"
       @grammar = 'c'
 
     # @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '
