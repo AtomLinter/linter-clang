@@ -39,7 +39,7 @@ class LinterClang extends Linter
       @clangPlusPlusCmd = atom.config.get 'linter-clang.clangPlusPlusCommand'
       @cmd = "#{@clangPlusPlusCmd} #{@cmd} -x c++ -std=c++11 -fcxx-exceptions"
     else
-      @clangCmd = atom.config.get 'linger-clang.clangCommand'
+      @clangCmd = atom.config.get 'linter-clang.clangCommand'
       @cmd = "#{@clangCmd} #{@cmd} -x c -std=c11 -fexceptions"
 
     if @isCpp
