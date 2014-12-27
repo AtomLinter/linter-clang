@@ -14,8 +14,12 @@ class LinterClang extends Linter
   # containing the command line (with arguments) used to lint.
   cmd: '-fsyntax-only -fno-caret-diagnostics'
   isCpp: false
+  clangCmd: null
+  clangPlusPlusCmd: null
 
   executablePath: null
+
+  editor: null
 
   linterName: 'clang'
 
@@ -32,6 +36,13 @@ class LinterClang extends Linter
     tmp = @cmd
 
     if @isCpp
+      @clangPlusPlusCmd = atom.config.get 'linter-clang.clangPlusPlusCommand'
+      @cmd = "#{@clangPlusPlusCmd} #{@cmd} -x c++ -std=c++11 -fcxx-exceptions"
+    else
+      @clangCmd = atom.config.get 'linter-clang.clangCommand'
+      @cmd = "#{@clangCmd} #{@cmd} -x c -std=c11 -fexceptions"
+
+    if @isCpp
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
     else
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
@@ -41,8 +52,8 @@ class LinterClang extends Linter
     # read other include paths from file in project
     filename = atom.project.getPaths()[0] + '/.linter-clang-includes'
     if fs.existsSync filename
-        file = fs.readFileSync filename, 'utf8'
-        includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
+      file = fs.readFileSync filename, 'utf8'
+      includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
 
     split = includepaths.split " "
 
@@ -91,16 +102,16 @@ class LinterClang extends Linter
     @cmd = tmp;
 
   constructor: (editor) ->
-    super(editor)
+    @editor = editor
+
     if editor.getGrammar().name == 'C++'
-      @cmd = "#{atom.config.get 'linter-clang.clangPlusPlusCommand'} "  + @cmd + ' -x c++ -std=c++11 -fcxx-exceptions'
       @grammar = '+'
       @isCpp = true
     if editor.getGrammar().name == 'C'
-      @cmd = "#{atom.config.get 'linter-clang.clangCommand'} " + @cmd + ' -x c -std=c11 -fexceptions'
+      @isCpp = false
       @grammar = 'c'
 
-    # @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '
+    super(editor)
 
     atom.config.observe 'linter-clang.clangExecutablePath', =>
       @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
