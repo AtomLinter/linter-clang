@@ -13,10 +13,9 @@ class LinterClang extends Linter
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
-  cmd: '-fsyntax-only -fno-caret-diagnostics'
+  cmd: '-fsyntax-only -fno-caret-diagnostics -fexceptions'
   isCpp: false
-  clangCmd: null
-  clangPlusPlusCmd: null
+  clang: null
 
   executablePath: null
 
@@ -36,12 +35,11 @@ class LinterClang extends Linter
     # save cmd to tmp
     tmp = @cmd
 
-    if @isCpp
-      @clangPlusPlusCmd = atom.config.get 'linter-clang.clangPlusPlusCommand'
-      @cmd = "#{@clangPlusPlusCmd} #{@cmd} -x c++ -std=c++11 -fcxx-exceptions"
-    else
-      @clangCmd = atom.config.get 'linter-clang.clangCommand'
-      @cmd = "#{@clangCmd} #{@cmd} -x c -std=c11 -fexceptions"
+    @clang = atom.config.get 'linter-clang.clangCommand'
+    if atom.inDevMode()
+      console.log 'clang-command: ' + @clang
+
+    @cmd = "#{@clang} #{@cmd} -x #{@language}"
 
     if @isCpp
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
@@ -66,13 +64,6 @@ class LinterClang extends Linter
       @cmd = "#{@cmd} -w"
     # build the command with arguments to lint the file
     {command, args} = @getCmdAndArgs(filePath)
-
-    file = path.basename(args[args.length - 1])
-    if file[file.length - 1] == @grammar
-      file = file.replace(".", "\\.")
-      file = file.replace("++", "\\+\\+")
-      @regex = file + ':(?<line>\\d+):.+: .*((?<error>error)|' +
-                      '(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'is node executable: ' + @isNodeExecutable
@@ -106,11 +97,17 @@ class LinterClang extends Linter
     @editor = editor
 
     if editor.getGrammar().name == 'C++'
-      @grammar = '+'
+      @language = 'c++ -std=c++11'
+      @isCpp = true
+    if editor.getGrammar().name == 'Objective-C++'
+      @language = 'objective-c++'
       @isCpp = true
     if editor.getGrammar().name == 'C'
+      @language = 'c -std=c11'
       @isCpp = false
-      @grammar = 'c'
+    if editor.getGrammar().name == 'Objective-C'
+      @language = 'objective-c'
+      @isCpp = false
 
     super(editor)
 
