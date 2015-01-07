@@ -8,7 +8,7 @@ fs = require 'fs'
 class LinterClang extends Linter
   # The syntax that the linter handles. May be a string or
   # list/tuple of strings. Names should be all lowercase.
-  @syntax: ['source.c++', 'source.c']
+  @syntax: ['source.c++', 'source.c', 'source.cpp']
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
