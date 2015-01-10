@@ -23,13 +23,8 @@ class LinterClang extends Linter
 
   fileName: ''
 
-  # A regex pattern used to extract information from the executable's output.
-  regex: '.+:(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): ' +
-         '(?<message>.*)'
-
   lintFile: (filePath, callback) ->
-    # save cmd to tmp
-    tmp = @cmd
+    oldCmd = @cmd
 
     if @isCpp
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
@@ -58,12 +53,10 @@ class LinterClang extends Linter
     # build the command with arguments to lint the file
     {command, args} = @getCmdAndArgs(filePath)
 
-    file = path.basename(args[args.length - 1])
-    if file[file.length - 1] == @grammar
-      file = file.replace(".", "\\.")
-      file = file.replace("++", "\\+\\+")
-      @regex = file + ':(?<line>\\d+):.+: .*((?<error>error)|' +
-                      '(?<warning>warning)): (?<message>.*)'
+    # add file to regex to filter output to this file,
+    # need to change filename a bit to fit into regex
+    @regex = filePath.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") +
+        ':(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'is node executable: ' + @isNodeExecutable
@@ -90,8 +83,8 @@ class LinterClang extends Linter
         @processMessage(output, callback)
 
     new Process({command, args, options, stdout, stderr})
-    #restore cmd
-    @cmd = tmp;
+    # restore cmd
+    @cmd = oldCmd;
 
   constructor: (editor) ->
     super(editor)
