@@ -31,6 +31,8 @@ class LinterClang extends Linter
     else
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
 
+    @cmd += ' -ferror-limit=' + atom.config.get 'linter-clang.clangErrorLimit'
+
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
     # read other include paths from file in project
@@ -81,6 +83,9 @@ class LinterClang extends Linter
         console.warn 'stderr', output
       if @errorStream == 'stderr'
         @processMessage(output, callback)
+
+    if atom.inDevMode()
+      console.log "command = #{command}, args = #{args}, options = #{options}"
 
     new Process({command, args, options, stdout, stderr})
     # restore cmd
