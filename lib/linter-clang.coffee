@@ -23,44 +23,42 @@ class LinterClang extends Linter
 
   fileName: ''
 
-  # A regex pattern used to extract information from the executable's output.
-  regex: '.+:(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): ' +
-         '(?<message>.*)'
-
   lintFile: (filePath, callback) ->
-    # save cmd to tmp
-    tmp = @cmd
+    oldCmd = @cmd
 
     if @isCpp
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
     else
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
 
+    @cmd += ' -ferror-limit=' + atom.config.get 'linter-clang.clangErrorLimit'
+
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
     # read other include paths from file in project
-    filename = atom.project.getPaths()[0] + '/.linter-clang-includes'
+    filename = path.resolve(atom.project.getPaths()[0], '.linter-clang-includes')
     if fs.existsSync filename
         file = fs.readFileSync filename, 'utf8'
-        includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
+        file = file.replace(/(\r\n|\n|\r)/gm, ' ')
+        includepaths = "#{includepaths} #{file}"
 
     split = includepaths.split " "
 
     # concat includepath
     for custompath in split
       if custompath.length > 0
-        @cmd = "#{@cmd} -I #{custompath}"
+        # if the path is relative, resolve it
+        custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
+        @cmd = "#{@cmd} -I #{custompathResolved}"
     if atom.config.get 'linter-clang.clangSuppressWarnings'
       @cmd = "#{@cmd} -w"
     # build the command with arguments to lint the file
     {command, args} = @getCmdAndArgs(filePath)
 
-    file = path.basename(args[args.length - 1])
-    if file[file.length - 1] == @grammar
-      file = file.replace(".", "\\.")
-      file = file.replace("++", "\\+\\+")
-      @regex = file + ':(?<line>\\d+):.+: .*((?<error>error)|' +
-                      '(?<warning>warning)): (?<message>.*)'
+    # add file to regex to filter output to this file,
+    # need to change filename a bit to fit into regex
+    @regex = filePath.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") +
+        ':(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'is node executable: ' + @isNodeExecutable
@@ -86,9 +84,12 @@ class LinterClang extends Linter
       if @errorStream == 'stderr'
         @processMessage(output, callback)
 
+    if atom.inDevMode()
+      console.log "command = #{command}, args = #{args}, options = #{options}"
+
     new Process({command, args, options, stdout, stderr})
-    #restore cmd
-    @cmd = tmp;
+    # restore cmd
+    @cmd = oldCmd;
 
   constructor: (editor) ->
     super(editor)
