@@ -58,7 +58,7 @@ class LinterClang extends Linter
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
     @regex = filePath.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") +
-        ':(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
+        ':(?<line>\\d+):(?<col>\\d+): .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'is node executable: ' + @isNodeExecutable
