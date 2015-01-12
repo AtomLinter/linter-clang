@@ -8,14 +8,18 @@ fs = require 'fs'
 class LinterClang extends Linter
   # The syntax that the linter handles. May be a string or
   # list/tuple of strings. Names should be all lowercase.
-  @syntax: ['source.c++', 'source.c']
+  @syntax: ['source.c++', 'source.cpp', 'source.c', 'source.objc++',
+  'source.objcpp', 'source.objc']
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
-  cmd: '-fsyntax-only -fno-caret-diagnostics'
+  cmd: '-fsyntax-only -fno-caret-diagnostics -fexceptions'
   isCpp: false
+  clang: null
 
   executablePath: null
+
+  editor: null
 
   linterName: 'clang'
 
@@ -31,6 +35,12 @@ class LinterClang extends Linter
     # save cmd to tmp
     tmp = @cmd
 
+    @clang = atom.config.get 'linter-clang.clangCommand'
+    if atom.inDevMode()
+      console.log 'clang-command: ' + @clang
+
+    @cmd = "#{@clang} #{@cmd} -x #{@language}"
+
     if @isCpp
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
     else
@@ -41,8 +51,8 @@ class LinterClang extends Linter
     # read other include paths from file in project
     filename = atom.project.getPaths()[0] + '/.linter-clang-includes'
     if fs.existsSync filename
-        file = fs.readFileSync filename, 'utf8'
-        includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
+      file = fs.readFileSync filename, 'utf8'
+      includepaths = "#{includepaths} #{file.replace('\n', ' ')}"
 
     split = includepaths.split " "
 
@@ -54,13 +64,6 @@ class LinterClang extends Linter
       @cmd = "#{@cmd} -w"
     # build the command with arguments to lint the file
     {command, args} = @getCmdAndArgs(filePath)
-
-    file = path.basename(args[args.length - 1])
-    if file[file.length - 1] == @grammar
-      file = file.replace(".", "\\.")
-      file = file.replace("++", "\\+\\+")
-      @regex = file + ':(?<line>\\d+):.+: .*((?<error>error)|' +
-                      '(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'is node executable: ' + @isNodeExecutable
@@ -91,16 +94,22 @@ class LinterClang extends Linter
     @cmd = tmp;
 
   constructor: (editor) ->
-    super(editor)
+    @editor = editor
+
     if editor.getGrammar().name == 'C++'
-      @cmd = "#{atom.config.get 'linter-clang.clangPlusPlusCommand'} "  + @cmd + ' -x c++ -std=c++11 -fcxx-exceptions'
-      @grammar = '+'
+      @language = 'c++ -std=c++11'
+      @isCpp = true
+    if editor.getGrammar().name == 'Objective-C++'
+      @language = 'objective-c++'
       @isCpp = true
     if editor.getGrammar().name == 'C'
-      @cmd = "#{atom.config.get 'linter-clang.clangCommand'} " + @cmd + ' -x c -std=c11 -fexceptions'
-      @grammar = 'c'
+      @language = 'c -std=c11'
+      @isCpp = false
+    if editor.getGrammar().name == 'Objective-C'
+      @language = 'objective-c'
+      @isCpp = false
 
-    # @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '
+    super(editor)
 
     atom.config.observe 'linter-clang.clangExecutablePath', =>
       @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
