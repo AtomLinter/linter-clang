@@ -49,7 +49,7 @@ class LinterClang extends Linter
       if custompath.length > 0
         # if the path is relative, resolve it
         custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
-        @cmd = "#{@cmd} -I #{custompathResolved}"
+        @cmd = "#{@cmd} -I \"#{custompathResolved}\""
     if atom.config.get 'linter-clang.clangSuppressWarnings'
       @cmd = "#{@cmd} -w"
     # build the command with arguments to lint the file
