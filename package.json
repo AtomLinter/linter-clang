@@ -13,5 +13,7 @@
   "engines": {
     "atom": ">0.50.0"
   },
-  "dependencies": {}
+  "dependencies": {
+      "clang-flags": "git://github.com/wanderer2/clang-flags.git"
+  }
 }

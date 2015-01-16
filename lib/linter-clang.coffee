@@ -3,7 +3,7 @@ linterPath = atom.packages.getLoadedPackage("linter").path
 Linter = require "#{linterPath}/lib/linter"
 path = require 'path'
 fs = require 'fs'
-# ClangFlags = require 'clang-flags'
+ClangFlags = require 'clang-flags'
 
 class LinterClang extends Linter
   # The syntax that the linter handles. May be a string or
@@ -43,6 +43,9 @@ class LinterClang extends Linter
       @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
 
     @cmd += ' -ferror-limit=' + atom.config.get 'linter-clang.clangErrorLimit'
+
+    if atom.config.get 'linter-clang.clangCompleteFile'
+      @cmd += ' ' + ClangFlags.getClangFlags(@editor.getPath()).join ' '
 
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
