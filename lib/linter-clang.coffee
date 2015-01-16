@@ -44,6 +44,8 @@ class LinterClang extends Linter
 
     @cmd += ' -ferror-limit=' + atom.config.get 'linter-clang.clangErrorLimit'
 
+    @cmd += ' -I' + @editor.getPath().replace(/(.*)\/.*/, '$1')
+
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
     # read other include paths from file in project
