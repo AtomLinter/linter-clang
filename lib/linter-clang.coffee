@@ -47,6 +47,8 @@ class LinterClang extends Linter
     if atom.config.get 'linter-clang.clangCompleteFile'
       @cmd += ' ' + ClangFlags.getClangFlags(@editor.getPath()).join ' '
 
+    @cmd += ' -I' + @editor.getPath().replace(/(.*)\/.*/, '$1')
+
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
     # read other include paths from file in project
@@ -61,7 +63,7 @@ class LinterClang extends Linter
     # concat includepath
     for custompath in split
       if custompath.length > 0
-        @cmd = "#{@cmd} -I #{custompath}"
+        @cmd = "#{@cmd} -I#{custompath}"
         # if the path is relative, resolve it
         # TODO: if path contain blank space!!!
         # custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
