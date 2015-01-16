@@ -44,7 +44,6 @@ class LinterClang extends Linter
 
     @cmd += ' -ferror-limit=' + atom.config.get 'linter-clang.clangErrorLimit'
 
-    console.log atom.config.get 'linter-clang.clangCompleteFile'
     if atom.config.get 'linter-clang.clangCompleteFile'
       @cmd += ' ' + ClangFlags.getClangFlags(@editor.getPath()).join ' '
 
