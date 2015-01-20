@@ -3,7 +3,7 @@
   "linter-package": true,
   "activationEvents": [],
   "main": "./lib/init",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "description": "Lint C / C++ on the fly using clang",
   "repository": {
     "type": "git",
@@ -14,6 +14,6 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-      "clang-flags": "git://github.com/wanderer2/clang-flags.git"
+    "clang-flags": "git://github.com/wanderer2/clang-flags.git"
   }
 }
