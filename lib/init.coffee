@@ -7,6 +7,7 @@ module.exports =
     clangDefaultCFlags: '-Wall'
     clangDefaultCppFlags: '-Wall'
     clangErrorLimit: 0
+    clangCompleteFile: false
 
   activate: ->
     console.log 'activate linter-clang'
