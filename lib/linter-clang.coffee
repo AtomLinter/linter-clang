@@ -49,7 +49,7 @@ class LinterClang extends Linter
       if custompath.length > 0
         # if the path is relative, resolve it
         custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
-        @cmd = "#{@cmd} -I #{custompathResolved}"
+        @cmd = "#{@cmd} -I \"#{custompathResolved}\""
     if atom.config.get 'linter-clang.clangSuppressWarnings'
       @cmd = "#{@cmd} -w"
     # build the command with arguments to lint the file
@@ -61,7 +61,7 @@ class LinterClang extends Linter
         ':(?<line>\\d+):(?<col>\\d+): .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
-      console.log 'is node executable: ' + @isNodeExecutable
+      console.log 'linter-clang: is node executable: ' + @isNodeExecutable
 
     # use BufferedNodeProcess if the linter is node executable
     if @isNodeExecutable
@@ -74,18 +74,18 @@ class LinterClang extends Linter
 
     stdout = (output) =>
       if atom.inDevMode()
-        console.log 'stdout', output
+        console.log 'clang: stdout ', output
       if @errorStream == 'stdout'
         @processMessage(output, callback)
 
     stderr = (output) =>
       if atom.inDevMode()
-        console.warn 'stderr', output
+        console.warn 'clang: stderr ', output
       if @errorStream == 'stderr'
         @processMessage(output, callback)
 
     if atom.inDevMode()
-      console.log "command = #{command}, args = #{args}, options = #{options}"
+      console.log "clang command = #{command}, args = #{args}, options = #{options}"
 
     new Process({command, args, options, stdout, stderr})
     # restore cmd
