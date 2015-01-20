@@ -42,7 +42,16 @@ class LinterClang extends Linter
         file = file.replace(/(\r\n|\n|\r)/gm, ' ')
         includepaths = "#{includepaths} #{file}"
 
-    split = includepaths.split " "
+    # split the include paths, taking care of quotes
+    regex = /[^\s"]+|"([^"]*)"/gi
+    split = []
+
+    loop
+        match = regex.exec includepaths
+        if match
+            split.push(if match[1] then match[1] else match[0])
+        else
+            break
 
     # concat includepath
     for custompath in split
