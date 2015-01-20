@@ -24,14 +24,19 @@ class LinterClang extends Linter
   fileName: ''
 
   lintFile: (filePath, callback) ->
-    oldCmd = @cmd
+    # build the command with arguments to lint the file
+    {command, args} = @getCmdAndArgs(filePath)
+
+    # some flags
 
     if @isCpp
-      @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
+        args.push atom.config.get 'linter-clang.clangDefaultCppFlags'
     else
-      @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
+        args.push atom.config.get 'linter-clang.clangDefaultCFlags'
 
-    @cmd += ' -ferror-limit=' + atom.config.get 'linter-clang.clangErrorLimit'
+    args.push "-ferror-limit=#{atom.config.get 'linter-clang.clangErrorLimit'}"
+
+    args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
 
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
@@ -44,25 +49,22 @@ class LinterClang extends Linter
 
     # split the include paths, taking care of quotes
     regex = /[^\s"]+|"([^"]*)"/gi
-    split = []
+    includepathsSplit = []
 
     loop
         match = regex.exec includepaths
         if match
-            split.push(if match[1] then match[1] else match[0])
+            includepathsSplit.push(if match[1] then match[1] else match[0])
         else
             break
 
-    # concat includepath
-    for custompath in split
+    # add includepaths
+    for custompath in includepathsSplit
       if custompath.length > 0
         # if the path is relative, resolve it
         custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
-        @cmd = "#{@cmd} -I \"#{custompathResolved}\""
-    if atom.config.get 'linter-clang.clangSuppressWarnings'
-      @cmd = "#{@cmd} -w"
-    # build the command with arguments to lint the file
-    {command, args} = @getCmdAndArgs(filePath)
+        args.push '-I'
+        args.push custompathResolved
 
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
@@ -97,8 +99,6 @@ class LinterClang extends Linter
       console.log "clang command = #{command}, args = #{args}, options = #{options}"
 
     new Process({command, args, options, stdout, stderr})
-    # restore cmd
-    @cmd = oldCmd;
 
   constructor: (editor) ->
     super(editor)
@@ -110,6 +110,7 @@ class LinterClang extends Linter
       @cmd = 'clang ' + @cmd + ' -x c -std=c11 -fexceptions'
       @grammar = 'c'
 
+    @cmd+= ' -v' if atom.inDevMode()
     # @cmd += ' ' + ClangFlags.getClangFlags(editor.getPath()).join ' '
 
     atom.config.observe 'linter-clang.clangExecutablePath', =>
