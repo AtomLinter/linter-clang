@@ -15,5 +15,416 @@
   },
   "dependencies": {
     "clang-flags": "git://github.com/wanderer2/clang-flags.git"
+  },
+  "readme": "# linter-clang package\n\nThis linter plugin for [Linter](https://github.com/AtomLinter/Linter) provides an interface to clang. It will be used with files that have the \"C++\"\" and \"C\" syntax.\n\n## Installation\nLinter package must be installed in order to use this plugin. If Linter is not installed, please follow the instructions [here](https://github.com/AtomLinter/Linter).\n\n### Plugin installation\n```\n$ apm install linter-clang\n```\n\n### Select C / C++ linter\n- C linter, select C Grammar\n- C++ linter, select C++ Grammar\n\n### Project-specific include paths\nIf your project has some extra include directories, put them in a file called \".linter-clang-includes\" and list them line by line or seperated by spaces.\nThe linter will open the file in those directories and use the specified paths when linting in your project.\n\n## Contributing\nIf you would like to contribute enhancements or fixes, please do the following:\n\n1. Fork the plugin repository.\n1. Hack on a separate topic branch created from the latest `master`.\n1. Commit and push the topic branch.\n1. Make a pull request.\n1. welcome to the club\n\nPlease note that modifications should follow these coding guidelines:\n\n- Indent is 2 spaces.\n- Code should pass coffeelint linter.\n- Vertical whitespace helps readability, don’t be afraid to use it.\n\nThank you for helping out!\n\n## TODO\nWhen there are errors in other files, sign them on the first line of the current file\n(Example: deleted constructor)\n## Other Available linters\n- [linter-php](https://atom.io/packages/linter-php), for PHP using `php -l`\n- [linter-phpcs](https://atom.io/packages/linter-phpcs), for PHP, using `phpc`\n- [linter-phpmd](https://atom.io/packages/linter-phpmd), for PHP, using `phpmd`\n- [linter-pylint](https://atom.io/packages/linter-pylint), for Python, using `pylint`\n- [linter-javac](https://atom.io/packages/linter-javac), for Java, using `javac`\n- [linter-jshint](https://atom.io/packages/linter-jshint), for JavaScript and JSON, using `jshint`\n- [linter-jscs](https://atom.io/packages/linter-jscs), for JavaScript, using `jscs`\n- [linter-scss-lint](https://atom.io/packages/linter-scss-lint), for SASS/SCSS, using `scss-lint`\n- [linter-coffeelint](https://atom.io/packages/linter-coffeelint), for CoffeeScript, using `coffeelint`\n- [linter-csslint](https://atom.io/packages/linter-csslint), for CSS, using `csslint`\n- [linter-rubocop](https://atom.io/packages/linter-rubocop), for Ruby, using `rubocop`\n- [linter-tslint](https://atom.io/packages/linter-tslint), for Typescript, using `tslint`\n- [linter-xmllint](https://atom.io/packages/linter-xmllint), for XML, using `xmllint`\n- [linter-shellcheck](https://atom.io/packages/linter-shellcheck), for Bash, using `shellcheck`\n- [linter-scalac](https://atom.io/packages/linter-scalac), for Scala, using `scalac`\n\nCheck out [AtomLinter](https://github.com/AtomLinter)!\n\n## Donation\n[![Share the love!](https://chewbacco-stuff.s3.amazonaws.com/donate.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=KXUYS4ARNHCN8)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/AtomLinter/linter-clang/issues"
+  },
+  "homepage": "https://github.com/AtomLinter/linter-clang",
+  "_id": "linter-clang@2.11.0",
+  "dist": {
+    "shasum": "8174885b338f4064c968ce7d36ef185c71e0cb38"
+  },
+  "_resolved": "/private/var/folders/q6/chyv15m12_bclp_wmk_n2thh0000gn/T/d-115020-2496-xs73ql/package.tgz",
+  "_from": "/private/var/folders/q6/chyv15m12_bclp_wmk_n2thh0000gn/T/d-115020-2496-xs73ql/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [
+      {
+        "name": "clang-flags",
+        "version": "0.1.0",
+        "path": "node_modules/clang-flags/lib/clang-flags.coffee"
+      },
+      {
+        "name": "pathwatcher",
+        "version": "2.6.1",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/lib/main.js"
+      },
+      {
+        "name": "async",
+        "version": "0.2.10",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/async/lib/async.js"
+      },
+      {
+        "name": "emissary",
+        "version": "1.3.1",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/emissary.js"
+      },
+      {
+        "name": "harmony-collections",
+        "version": "0.3.7",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/harmony-collections/harmony-collections.js"
+      },
+      {
+        "name": "mixto",
+        "version": "1.0.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/mixto/lib/mixin.js"
+      },
+      {
+        "name": "property-accessors",
+        "version": "1.1.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/lib/property-accessors.js"
+      },
+      {
+        "name": "harmony-collections",
+        "version": "0.3.7",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/node_modules/harmony-collections/harmony-collections.js"
+      },
+      {
+        "name": "event-kit",
+        "version": "1.0.1",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/lib/event-kit.js"
+      },
+      {
+        "name": "fs-plus",
+        "version": "2.4.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/lib/fs-plus.js"
+      },
+      {
+        "name": "mkdirp",
+        "version": "0.3.5",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/mkdirp/index.js"
+      },
+      {
+        "name": "rimraf",
+        "version": "2.2.8",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/rimraf/rimraf.js"
+      },
+      {
+        "name": "grim",
+        "version": "1.1.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/lib/grim.js"
+      },
+      {
+        "name": "coffeestack",
+        "version": "0.7.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/index.js"
+      },
+      {
+        "name": "coffee-script",
+        "version": "1.7.1",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/coffee-script.js"
+      },
+      {
+        "name": "mkdirp",
+        "version": "0.3.5",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/node_modules/mkdirp/index.js"
+      },
+      {
+        "name": "source-map",
+        "version": "0.1.43",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map.js"
+      },
+      {
+        "name": "amdefine",
+        "version": "0.1.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/node_modules/amdefine/amdefine.js"
+      },
+      {
+        "name": "iconv-lite",
+        "version": "0.4.6",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/lib/index.js"
+      },
+      {
+        "name": "nan",
+        "version": "1.2.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/nan/include_dirs.js"
+      },
+      {
+        "name": "q",
+        "version": "1.0.1",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/q/q.js"
+      },
+      {
+        "name": "runas",
+        "version": "1.1.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/lib/runas.js"
+      },
+      {
+        "name": "underscore-plus",
+        "version": "1.6.6",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/lib/underscore-plus.js"
+      },
+      {
+        "name": "underscore",
+        "version": "1.6.0",
+        "path": "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      }
+    ],
+    "extensions": {
+      ".coffee": [
+        "lib/init.coffee",
+        "lib/linter-clang.coffee",
+        "node_modules/clang-flags/lib/clang-flags.coffee"
+      ],
+      ".json": [
+        "node_modules/clang-flags/node_modules/pathwatcher/api.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/async/component.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/async/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/harmony-collections/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/mixto/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/node_modules/harmony-collections/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/api.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/mkdirp/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/rimraf/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/node_modules/mkdirp/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/node_modules/amdefine/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/big5-added.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/cp936.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/cp949.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/cp950.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/eucjp.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/gb18030-ranges.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/gbk-added.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/tables/shiftjis.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/nan/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/q/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/node_modules/underscore/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/package.json",
+        "node_modules/clang-flags/node_modules/pathwatcher/package.json",
+        "node_modules/clang-flags/package.json",
+        "package.json"
+      ],
+      ".node": [
+        "node_modules/clang-flags/node_modules/pathwatcher/build/Release/pathwatcher.node",
+        "node_modules/clang-flags/node_modules/pathwatcher/build/Release/pathwatcher.node.dSYM/Contents/Resources/DWARF/pathwatcher.node",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/build/Release/runas.node",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/build/Release/runas.node.dSYM/Contents/Resources/DWARF/runas.node"
+      ],
+      ".js": [
+        "node_modules/clang-flags/node_modules/pathwatcher/lib/directory.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/lib/file.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/lib/main.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/async/lib/async.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/behavior.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/emissary.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/emitter.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/helpers.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/signal.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/subscriber.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib/subscription.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/harmony-collections/harmony-collections.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/harmony-collections/harmony-collections.min.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/mixto/lib/mixin.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/lib/property-accessors.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/node_modules/harmony-collections/harmony-collections.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/node_modules/harmony-collections/harmony-collections.min.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/lib/composite-disposable.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/lib/disposable.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/lib/emitter.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/lib/event-kit.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/lib/fs-plus.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/mkdirp/examples/pow.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/mkdirp/index.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/rimraf/bin.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/node_modules/rimraf/rimraf.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/lib/deprecation.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/lib/grim.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/index.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/browser.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/cake.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/coffee-script.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/command.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/grammar.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/helpers.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/index.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/lexer.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/nodes.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/optparse.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/parser.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/register.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/repl.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/rewriter.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/scope.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script/sourcemap.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/node_modules/mkdirp/examples/pow.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/node_modules/mkdirp/index.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/register.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/Makefile.dryice.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/build/assert-shim.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/build/mini-require.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/build/suffix-browser.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/build/test-prefix.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/build/test-suffix.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/array-set.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/base64-vlq.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/base64.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/binary-search.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/mapping-list.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/source-map-consumer.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/source-map-generator.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/source-node.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map/util.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/node_modules/amdefine/amdefine.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/node_modules/amdefine/intercept.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/dbcs-codec.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/dbcs-data.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/index.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/internal.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/sbcs-codec.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/sbcs-data-generated.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/sbcs-data.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/utf16.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/encodings/utf7.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/lib/extend-node.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/lib/index.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/iconv-lite/lib/streams.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/nan/include_dirs.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/q/benchmark/compare-with-callbacks.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/q/benchmark/scenarios.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/q/q.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/q/queue.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/lib/runas.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/lib/underscore-plus.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/node_modules/underscore/underscore-min.js",
+        "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/node_modules/underscore/underscore.js"
+      ]
+    },
+    "folders": [
+      {
+        "paths": [
+          "node_modules/clang-flags/lib",
+          "node_modules/clang-flags"
+        ],
+        "dependencies": {
+          "pathwatcher": "^2.5.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher",
+          "node_modules/clang-flags/node_modules/pathwatcher/build/Release",
+          "node_modules/clang-flags/node_modules/pathwatcher/build/Release/pathwatcher.node.dSYM/Contents/Resources/DWARF",
+          "node_modules/clang-flags/node_modules/pathwatcher/lib"
+        ],
+        "dependencies": {
+          "async": "~0.2.10",
+          "emissary": "^1.1.0",
+          "event-kit": "^1.0.0",
+          "fs-plus": "^2.1",
+          "grim": "^1.0.0",
+          "iconv-lite": "~0.4.4",
+          "nan": "1.2.0",
+          "q": "~1.0.1",
+          "runas": "^1.0.1",
+          "underscore-plus": "~1.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/lib",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary"
+        ],
+        "dependencies": {
+          "underscore-plus": "1.x",
+          "mixto": "1.x",
+          "property-accessors": "^1.1"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors/lib",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/emissary/node_modules/property-accessors"
+        ],
+        "dependencies": {
+          "mixto": "1.x"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/event-kit/lib"
+        ],
+        "dependencies": {
+          "grim": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus/lib",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/fs-plus"
+        ],
+        "dependencies": {
+          "underscore-plus": "1.x",
+          "mkdirp": "~0.3.5",
+          "rimraf": "~2.2.2",
+          "async": "~0.2.9"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/lib",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim"
+        ],
+        "dependencies": {
+          "coffeestack": "^0.7.0",
+          "emissary": "^1.2.0",
+          "underscore-plus": "^1.0.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack"
+        ],
+        "dependencies": {
+          "coffee-script": "~1.7.0",
+          "source-map": "~0.1.31"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script/lib/coffee-script",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/coffee-script"
+        ],
+        "dependencies": {
+          "mkdirp": "~0.3.5"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/build",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib/source-map",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/lib",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/test",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/grim/node_modules/coffeestack/node_modules/source-map/test/source-map"
+        ],
+        "dependencies": {
+          "amdefine": ">=0.0.4"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/build/Release",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/build/Release/runas.node.dSYM/Contents/Resources/DWARF",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas/lib",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/runas"
+        ],
+        "dependencies": {
+          "nan": "1.2.0"
+        }
+      },
+      {
+        "paths": [
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus/lib",
+          "node_modules/clang-flags/node_modules/pathwatcher/node_modules/underscore-plus"
+        ],
+        "dependencies": {
+          "underscore": "~1.6.0"
+        }
+      }
+    ]
   }
 }

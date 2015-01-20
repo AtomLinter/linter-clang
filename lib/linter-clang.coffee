@@ -64,8 +64,8 @@ class LinterClang extends Linter
         @cmd = "#{@cmd} -I #{custompath}"
         # if the path is relative, resolve it
         # TODO: if path contain blank space!!!
-        custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
-        @cmd = "#{@cmd} -I \"#{custompathResolved}\""
+        # custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
+        # @cmd = "#{@cmd} -I \"#{custompathResolved}\""
         # custompathResolved = custompathResolved.replace(/\ /g, '\\ ')
         # @cmd = "#{@cmd} -I #{custompathResolved}"
 
