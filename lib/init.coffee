@@ -5,7 +5,7 @@ module.exports =
     clangIncludePaths: '.'
     clangSuppressWarnings: false
     clangDefaultCFlags: '-Wall'
-    clangDefaultCppFlags: '-Wall'
+    clangDefaultCppFlags: '-Wall -std=c++11'
     clangErrorLimit: 0
     clangCompleteFile: false
 

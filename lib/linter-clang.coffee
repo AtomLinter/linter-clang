@@ -41,13 +41,25 @@ class LinterClang extends Linter
 
     args.push '-x'
     args.push @language
-    args.push @flag
 
     if @isCpp
-      # TODO: loop flags separate from blank space
-      args.push atom.config.get 'linter-clang.clangDefaultCppFlags'
+      flag = atom.config.get 'linter-clang.clangDefaultCppFlags'
     else
-      args.push atom.config.get 'linter-clang.clangDefaultCFlags'
+      flag = atom.config.get 'linter-clang.clangDefaultCFlags'
+
+    regex = /[^\s"]+|"([^"]*)"/gi
+    flagSplit = []
+
+    loop
+      match = regex.exec flag
+      if match
+        flagSplit.push(if match[1] then match[1] else match[0])
+      else
+        break
+
+    for customflag in flagSplit
+      if customflag.length > 0
+        args.push customflag
 
     args.push "-ferror-limit=#{atom.config.get 'linter-clang.clangErrorLimit'}"
     args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
@@ -79,9 +91,6 @@ class LinterClang extends Linter
     # add includepaths
     for custompath in includepathsSplit
       if custompath.length > 0
-        # @cmd = "#{@cmd} -I #{custompath}"
-        # if the path is relative, resolve it
-        # TODO: if path contain blank space!!!
         custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
         args.push '-I'
         args.push custompathResolved
@@ -116,7 +125,7 @@ class LinterClang extends Linter
         @processMessage(output, callback)
 
     args.push @fileName
-    
+
     if atom.inDevMode()
       console.log "clang: command = #{command}, args = #{args}, options = #{options}"
 
@@ -130,19 +139,19 @@ class LinterClang extends Linter
 
     if editor.getGrammar().name == 'C++'
       @language = 'c++'
-      @flag = '-std=c++11'
+      # @flag = '-std=c++11'
       @isCpp = true
     if editor.getGrammar().name == 'Objective-C++'
       @language = 'objective-c++'
-      @flag = ''
+      # @flag = ''
       @isCpp = true
     if editor.getGrammar().name == 'C'
       @language = 'c'
-      @flag = ''
+      # @flag = ''
       @isCpp = false
     if editor.getGrammar().name == 'Objective-C'
       @language = 'objective-c'
-      @flag = ''
+      # @flag = ''
       @isCpp = false
 
     super(editor)
