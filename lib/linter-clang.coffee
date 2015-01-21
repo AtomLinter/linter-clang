@@ -13,9 +13,10 @@ class LinterClang extends Linter
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
-  cmd: '-fsyntax-only -fno-caret-diagnostics -fexceptions'
+
   isCpp: false
   clang: null
+  @cmd: ''
 
   executablePath: null
 
@@ -28,24 +29,31 @@ class LinterClang extends Linter
   fileName: ''
 
   lintFile: (filePath, callback) ->
-    # save cmd to oldCmd
-    oldCmd = @cmd
+    @cmd = 'clang -fsyntax-only -fno-caret-diagnostics -fexceptions'
 
-    @clang = atom.config.get 'linter-clang.clangCommand'
+    {command, args} = @getCmdAndArgs(filePath)
+    @fileName = args[3]
+    args[3] = ''
+
+    command = @clang = atom.config.get 'linter-clang.clangCommand'
     if atom.inDevMode()
       console.log 'clang-command: ' + @clang
 
-    @cmd = "#{@clang} #{@cmd} -x #{@language}"
+    args.push '-x'
+    args.push @language
+    args.push @flag
 
     if @isCpp
-      @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCppFlags'
+      # TODO: loop flags separate from blank space
+      args.push atom.config.get 'linter-clang.clangDefaultCppFlags'
     else
-      @cmd += ' ' + atom.config.get 'linter-clang.clangDefaultCFlags'
+      args.push atom.config.get 'linter-clang.clangDefaultCFlags'
 
-    @cmd += ' -ferror-limit=' + atom.config.get 'linter-clang.clangErrorLimit'
+    args.push "-ferror-limit=#{atom.config.get 'linter-clang.clangErrorLimit'}"
+    args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
 
     if atom.config.get 'linter-clang.clangCompleteFile'
-      @cmd += ' ' + ClangFlags.getClangFlags(@editor.getPath()).join ' '
+      args.push ClangFlags.getClangFlags(@editor.getPath()).join
 
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
@@ -56,23 +64,27 @@ class LinterClang extends Linter
       file = file.replace(/(\r\n|\n|\r)/gm, ' ')
       includepaths = "#{includepaths} #{file}"
 
-    split = includepaths.split " "
+    #split = includepaths.split " "
+    # split the include paths, taking care of quotes
+    regex = /[^\s"]+|"([^"]*)"/gi
+    includepathsSplit = []
 
-    # concat includepath
-    for custompath in split
+    loop
+      match = regex.exec includepaths
+      if match
+        includepathsSplit.push(if match[1] then match[1] else match[0])
+      else
+        break
+
+    # add includepaths
+    for custompath in includepathsSplit
       if custompath.length > 0
-        @cmd = "#{@cmd} -I #{custompath}"
+        # @cmd = "#{@cmd} -I #{custompath}"
         # if the path is relative, resolve it
         # TODO: if path contain blank space!!!
-        # custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
-        # @cmd = "#{@cmd} -I \"#{custompathResolved}\""
-        # custompathResolved = custompathResolved.replace(/\ /g, '\\ ')
-        # @cmd = "#{@cmd} -I #{custompathResolved}"
-
-    if atom.config.get 'linter-clang.clangSuppressWarnings'
-      @cmd = "#{@cmd} -w"
-    # build the command with arguments to lint the file
-    {command, args} = @getCmdAndArgs(filePath)
+        custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
+        args.push '-I'
+        args.push custompathResolved
 
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
@@ -80,7 +92,7 @@ class LinterClang extends Linter
     ':(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
-      console.log 'is node executable: ' + @isNodeExecutable
+      console.log 'linter-clang: is node executable: ' + @isNodeExecutable
 
     # use BufferedNodeProcess if the linter is node executable
     if @isNodeExecutable
@@ -93,38 +105,44 @@ class LinterClang extends Linter
 
     stdout = (output) =>
       if atom.inDevMode()
-        console.log 'stdout', output
+        console.log 'clang: stdout', output
       if @errorStream == 'stdout'
         @processMessage(output, callback)
 
     stderr = (output) =>
       if atom.inDevMode()
-        console.warn 'stderr', output
+        console.warn 'clang: stderr', output
       if @errorStream == 'stderr'
         @processMessage(output, callback)
 
+    args.push @fileName
+    
     if atom.inDevMode()
-      console.log "command = #{command}, args = #{args}, options = #{options}"
+      console.log "clang: command = #{command}, args = #{args}, options = #{options}"
 
     new Process({command, args, options, stdout, stderr})
 
     # restore cmd
-    @cmd = oldCmd
+    # @cmd = oldCmd
 
   constructor: (editor) ->
     @editor = editor
 
     if editor.getGrammar().name == 'C++'
-      @language = 'c++ -std=c++11'
+      @language = 'c++'
+      @flag = '-std=c++11'
       @isCpp = true
     if editor.getGrammar().name == 'Objective-C++'
       @language = 'objective-c++'
+      @flag = ''
       @isCpp = true
     if editor.getGrammar().name == 'C'
-      @language = 'c -std=c11'
+      @language = 'c'
+      @flag = ''
       @isCpp = false
     if editor.getGrammar().name == 'Objective-C'
       @language = 'objective-c'
+      @flag = ''
       @isCpp = false
 
     super(editor)
