@@ -91,7 +91,7 @@ class LinterClang extends Linter
     # add includepaths
     for custompath in includepathsSplit
       if custompath.length > 0
-        custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
+        custompathResolved = path.resolve(@cwd, custompath)
         args.push '-I'
         args.push custompathResolved
 
