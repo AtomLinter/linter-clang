@@ -41,7 +41,7 @@ class LinterClang extends Linter
     includepaths = atom.config.get 'linter-clang.clangIncludePaths'
 
     # read other include paths from file in project
-    filename = path.resolve(atom.project.getPaths()[0], '.linter-clang-includes')
+    filename = path.resolve(@cwd, '.linter-clang-includes')
     if fs.existsSync filename
         file = fs.readFileSync filename, 'utf8'
         file = file.replace(/(\r\n|\n|\r)/gm, ' ')
@@ -61,8 +61,13 @@ class LinterClang extends Linter
     # add includepaths
     for custompath in includepathsSplit
       if custompath.length > 0
+        # expand macro: directory of file being linted
+        custompath = custompath.replace '%d', path.dirname @editor.getPath
+        # expand macro: working directory
+        custompath = custompath.replace '%w', @cwd
+        custompath = curstompath.replace '%%', '%'
         # if the path is relative, resolve it
-        custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
+        custompathResolved = path.resolve(@cwd, custompath)
         args.push '-I'
         args.push custompathResolved
 
