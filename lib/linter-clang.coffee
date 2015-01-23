@@ -38,38 +38,46 @@ class LinterClang extends Linter
 
     args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
 
-    includepaths = atom.config.get 'linter-clang.clangIncludePaths'
+    # parse space separated string of includepaths relative to a directory, push to args
+    parseIncludePaths: (relative_path, a_includepaths) ->
+        # split the include paths by space taking care of quotes
+        regex = /[^\s"]+|"([^"]*)"/gi
+        includepathsSplit = []
 
-    # read other include paths from file in project
-    filename = path.resolve(@cwd, '.linter-clang-includes')
-    if fs.existsSync filename
-        file = fs.readFileSync filename, 'utf8'
-        file = file.replace(/(\r\n|\n|\r)/gm, ' ')
-        includepaths = "#{includepaths} #{file}"
+        loop
+            match = regex.exec includepaths
+            if match
+                includepathsSplit.push(if match[1] then match[1] else match[0])
+            else
+                break
 
-    # split the include paths, taking care of quotes
-    regex = /[^\s"]+|"([^"]*)"/gi
-    includepathsSplit = []
+        for ipath in includepathsSplit
+            if ipath.length > 0
+                # expand macro: directory of file being linted
+                ipath = ipath.replace '%d', path.dirname @editor.getPath
+                # expand macro: working directory
+                ipath = ipath.replace '%w', @cwd
+                ipath = ipath.replace '%%', '%'
+                pathResolved = ipath.resolve(relative_path, ipath)
+                args.push '-I'
+                args.push pathResolved
 
-    loop
-        match = regex.exec includepaths
-        if match
-            includepathsSplit.push(if match[1] then match[1] else match[0])
-        else
-            break
+    # filePath or what?
+    parseIncludePaths filePath, atom.config.get 'linter-clang.clangIncludePaths'
 
-    # add includepaths
-    for custompath in includepathsSplit
-      if custompath.length > 0
-        # expand macro: directory of file being linted
-        custompath = custompath.replace '%d', path.dirname @editor.getPath
-        # expand macro: working directory
-        custompath = custompath.replace '%w', @cwd
-        custompath = curstompath.replace '%%', '%'
-        # if the path is relative, resolve it
-        custompathResolved = path.resolve(@cwd, custompath)
-        args.push '-I'
-        args.push custompathResolved
+    # this function searched a directory for include path files
+    searchDirectory: (path) ->
+        fs.readdirSync path, (err, list) =>
+            for filename in list
+                fs.statSync filename, (err, stat) =>
+                    searchDirectory filename if file.isDirectory
+                    if filename.isFile and filename is '.linter-clang-includes'
+                        content = fs.readFileSync filename
+                        # get rid of newlines
+                        content = content.replace(/(\r\n|\n|\r)/gm, ' ')
+                        parseIncludePaths path, content
+
+    searchDirectory @cwd
 
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
