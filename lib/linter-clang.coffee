@@ -29,6 +29,21 @@ class LinterClang extends Linter
   fileName: ''
 
   lintFile: (filePath, callback) ->
+    # parse space separated string
+    parseSpaceString = (string) ->
+      # split the include paths by space taking care of quotes
+      regex = /[^\s"]+|"([^"]*)"/gi
+      stringSplit = []
+
+      loop
+        match = regex.exec string
+        if match
+          stringSplit.push(if match[1] then match[1] else match[0])
+        else
+          break
+
+      return stringSplit
+
     @cmd = 'clang -fsyntax-only -fno-caret-diagnostics -fexceptions'
 
     {command, args} = @getCmdAndArgs(filePath)
@@ -47,15 +62,7 @@ class LinterClang extends Linter
     else
       flag = atom.config.get 'linter-clang.clangDefaultCFlags'
 
-    regex = /[^\s"]+|"([^"]*)"/gi
-    flagSplit = []
-
-    loop
-      match = regex.exec flag
-      if match
-        flagSplit.push(if match[1] then match[1] else match[0])
-      else
-        break
+    flagSplit = parseSpaceString flag
 
     for customflag in flagSplit
       if customflag.length > 0
@@ -67,77 +74,31 @@ class LinterClang extends Linter
     if atom.config.get 'linter-clang.clangCompleteFile'
       args.push ClangFlags.getClangFlags(@editor.getPath()).join
 
-    # includepaths = atom.config.get 'linter-clang.clangIncludePaths'
-    #
-    # # read other include paths from file in project
-    # filename = path.resolve(atom.project.getPaths()[0], '.linter-clang-includes')
-    # if fs.existsSync filename
-    #   file = fs.readFileSync filename, 'utf8'
-    #   file = file.replace(/(\r\n|\n|\r)/gm, ' ')
-    #   includepaths = "#{includepaths} #{file}"
-    #
-    # #split = includepaths.split " "
-    # # split the include paths, taking care of quotes
-    # regex = /[^\s"]+|"([^"]*)"/gi
-    # includepathsSplit = []
-    #
-    # loop
-    #   match = regex.exec includepaths
-    #   if match
-    #     includepathsSplit.push(if match[1] then match[1] else match[0])
-    #   else
-    #     break
-    #
-    # # add includepaths
-    # for custompath in includepathsSplit
-    #   if custompath.length > 0
-    #     custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
-    #     args.push '-I'
-    #     args.push custompathResolved
+    includePath = (base, pathArray, args) ->
+      for ipath in pathArray
+        if ipath.length > 0
+          pathResolved = path.resolve(base, ipath)
+          args.push '-I'
+          args.push pathResolved
 
-    # parse space separated string of includepaths relative to a directory, push to args
-    parseIncludePaths = (relative_path, includepaths, epath) ->
-        # split the include paths by space taking care of quotes
-        regex = /[^\s"]+|"([^"]*)"/gi
-        includepathsSplit = []
+    pathArray =
+      parseSpaceString atom.config.get 'linter-clang.clangIncludePaths'
 
-        loop
-            match = regex.exec includepaths
-            if match
-                includepathsSplit.push(if match[1] then match[1] else match[0])
-            else
-                break
-
-        for ipath in includepathsSplit
-            if ipath.length > 0
-                # expand macro: directory of file being linted
-                ipath = ipath.replace '%d', path.dirname epath
-                # expand macro: working directory
-                ipath = ipath.replace '%w', @cwd
-                ipath = ipath.replace '%%', '%'
-                pathResolved = path.resolve relative_path, ipath
-                args.push '-I'
-                args.push pathResolved
-
-    epath = @editor.getPath()
-    ipath = atom.config.get 'linter-clang.clangIncludePaths'
-
-    # filePath or what?
-    parseIncludePaths @cwd, ipath, epath
+    includePath @cwd, pathArray, args
 
     # this function searched a directory for include path files
-    searchDirectory = (path, epath) ->
-        fs.readdirSync path, (err, list) =>
-            for filename in list
-                fs.statSync filename, (err, stat) =>
-                    searchDirectory filename if file.isDirectory
-                    if filename.isFile and filename is '.linter-clang-includes'
-                        content = fs.readFileSync filename
-                        # get rid of newlines
-                        content = content.replace(/(\r\n|\n|\r)/gm, ' ')
-                        parseIncludePaths path, content, epath
+    searchDirectory = (base, args) ->
+      list = fs.readdirSync base
+      for filename in list
+        stat = fs.statSync path.resolve(base, filename)
+        if stat.isDirectory()
+          searchDirectory path.resolve(base, filename), args
+        if stat.isFile() and filename is '.linter-clang-includes'
+          content = fs.readFileSync path.resolve(base, filename), 'utf8'
+          content = content.split("\n");
+          includePath base, content, args
 
-    searchDirectory @cwd, epath
+    searchDirectory @cwd, args
 
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
