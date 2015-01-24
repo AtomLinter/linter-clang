@@ -67,33 +67,77 @@ class LinterClang extends Linter
     if atom.config.get 'linter-clang.clangCompleteFile'
       args.push ClangFlags.getClangFlags(@editor.getPath()).join
 
-    includepaths = atom.config.get 'linter-clang.clangIncludePaths'
+    # includepaths = atom.config.get 'linter-clang.clangIncludePaths'
+    #
+    # # read other include paths from file in project
+    # filename = path.resolve(atom.project.getPaths()[0], '.linter-clang-includes')
+    # if fs.existsSync filename
+    #   file = fs.readFileSync filename, 'utf8'
+    #   file = file.replace(/(\r\n|\n|\r)/gm, ' ')
+    #   includepaths = "#{includepaths} #{file}"
+    #
+    # #split = includepaths.split " "
+    # # split the include paths, taking care of quotes
+    # regex = /[^\s"]+|"([^"]*)"/gi
+    # includepathsSplit = []
+    #
+    # loop
+    #   match = regex.exec includepaths
+    #   if match
+    #     includepathsSplit.push(if match[1] then match[1] else match[0])
+    #   else
+    #     break
+    #
+    # # add includepaths
+    # for custompath in includepathsSplit
+    #   if custompath.length > 0
+    #     custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
+    #     args.push '-I'
+    #     args.push custompathResolved
 
-    # read other include paths from file in project
-    filename = path.resolve(atom.project.getPaths()[0], '.linter-clang-includes')
-    if fs.existsSync filename
-      file = fs.readFileSync filename, 'utf8'
-      file = file.replace(/(\r\n|\n|\r)/gm, ' ')
-      includepaths = "#{includepaths} #{file}"
+    # parse space separated string of includepaths relative to a directory, push to args
+    parseIncludePaths = (relative_path, includepaths, epath) ->
+        # split the include paths by space taking care of quotes
+        regex = /[^\s"]+|"([^"]*)"/gi
+        includepathsSplit = []
 
-    #split = includepaths.split " "
-    # split the include paths, taking care of quotes
-    regex = /[^\s"]+|"([^"]*)"/gi
-    includepathsSplit = []
+        loop
+            match = regex.exec includepaths
+            if match
+                includepathsSplit.push(if match[1] then match[1] else match[0])
+            else
+                break
 
-    loop
-      match = regex.exec includepaths
-      if match
-        includepathsSplit.push(if match[1] then match[1] else match[0])
-      else
-        break
+        for ipath in includepathsSplit
+            if ipath.length > 0
+                # expand macro: directory of file being linted
+                ipath = ipath.replace '%d', path.dirname epath
+                # expand macro: working directory
+                ipath = ipath.replace '%w', @cwd
+                ipath = ipath.replace '%%', '%'
+                pathResolved = path.resolve relative_path, ipath
+                args.push '-I'
+                args.push pathResolved
 
-    # add includepaths
-    for custompath in includepathsSplit
-      if custompath.length > 0
-        custompathResolved = path.resolve(atom.project.getPaths()[0], custompath)
-        args.push '-I'
-        args.push custompathResolved
+    epath = @editor.getPath()
+    ipath = atom.config.get 'linter-clang.clangIncludePaths'
+
+    # filePath or what?
+    parseIncludePaths @cwd, ipath, epath
+
+    # this function searched a directory for include path files
+    searchDirectory = (path, epath) ->
+        fs.readdirSync path, (err, list) =>
+            for filename in list
+                fs.statSync filename, (err, stat) =>
+                    searchDirectory filename if file.isDirectory
+                    if filename.isFile and filename is '.linter-clang-includes'
+                        content = fs.readFileSync filename
+                        # get rid of newlines
+                        content = content.replace(/(\r\n|\n|\r)/gm, ' ')
+                        parseIncludePaths path, content, epath
+
+    searchDirectory @cwd, epath
 
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
@@ -130,9 +174,6 @@ class LinterClang extends Linter
       console.log "clang: command = #{command}, args = #{args}, options = #{options}"
 
     new Process({command, args, options, stdout, stderr})
-
-    # restore cmd
-    # @cmd = oldCmd
 
   constructor: (editor) ->
     @editor = editor
