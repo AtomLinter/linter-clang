@@ -65,10 +65,14 @@ class LinterClang extends Linter
     if atom.config.get 'linter-clang.clangCompleteFile'
       args.push ClangFlags.getClangFlags(@editor.getPath()).join
 
-    includePaths = (base, pathArray) ->
-      for ipath in pathArray
+    includePaths = (base, ipathArray) ->
+      for ipath in ipathArray
         if ipath.length > 0
-          pathResolved = path.resolve(base, ipath)
+          pathExpanded = ipath
+          pathExpanded = pathExpanded.replace '%d', @cwd
+          pathExpanded = pathExpanded.replace '%p', projectPath
+          pathExpanded = pathExpanded.replace '%%', '%'
+          pathResolved = path.resolve(base, pathExpanded)
           console.log "linter-clang: including #{pathResolved}" if atom.inDevMode()
           args.push "-I#{pathResolved}"
 
