@@ -16,8 +16,7 @@ class LinterClang extends Linter
 
   @cmd: ''
 
-  editor: null
-
+  #editor: null
 
   errorStream: 'stderr'
 
@@ -48,13 +47,13 @@ class LinterClang extends Linter
     args.push '-x'
     args.push @language
 
-    if editor.getGrammar().name == 'C++'
+    if @editor.getGrammar().name == 'C++'
       flag = atom.config.get 'linter-clang.clangDefaultCppFlags'
-    else if editor.getGrammar().name == 'Objective-C++'
+    else if @editor.getGrammar().name == 'Objective-C++'
       flag = atom.config.get 'linter-clang.clangDefaultObjCppFlags'
-    else if editor.getGrammar().name == 'C'
+    else if @editor.getGrammar().name == 'C'
       flag = atom.config.get 'linter-clang.clangDefaultCFlags'
-    else if editor.getGrammar().name == 'Objective-C'
+    else if @editor.getGrammar().name == 'Objective-C'
       flag = atom.config.get 'linter-clang.clangDefaultObjCFlags'
     else
       console.log "linter-clang error: unknown grammar '#{editor.getGrammar().name}'"
