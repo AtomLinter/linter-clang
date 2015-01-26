@@ -14,14 +14,12 @@ class LinterClang extends Linter
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
 
-  isCpp: false
   @cmd: ''
 
   editor: null
 
 
   errorStream: 'stderr'
-
 
   lintFile: (filePath, callback) ->
     # parse space separated string
@@ -50,10 +48,16 @@ class LinterClang extends Linter
     args.push '-x'
     args.push @language
 
-    if @isCpp
+    if editor.getGrammar().name == 'C++'
       flag = atom.config.get 'linter-clang.clangDefaultCppFlags'
-    else
+    else if editor.getGrammar().name == 'Objective-C++'
+      flag = atom.config.get 'linter-clang.clangDefaultObjCppFlags'
+    else if editor.getGrammar().name == 'C'
       flag = atom.config.get 'linter-clang.clangDefaultCFlags'
+    else if editor.getGrammar().name == 'Objective-C'
+      flag = atom.config.get 'linter-clang.clangDefaultObjCFlags'
+    else
+      console.log "linter-clang error: unknown grammar '#{editor.getGrammar().name}'"
 
     flagSplit = parseSpaceString flag
 
@@ -133,19 +137,15 @@ class LinterClang extends Linter
     if editor.getGrammar().name == 'C++'
       @language = 'c++'
       # @flag = '-std=c++11'
-      @isCpp = true
     if editor.getGrammar().name == 'Objective-C++'
       @language = 'objective-c++'
       # @flag = ''
-      @isCpp = true
     if editor.getGrammar().name == 'C'
       @language = 'c'
       # @flag = ''
-      @isCpp = false
     if editor.getGrammar().name == 'Objective-C'
       @language = 'objective-c'
       # @flag = ''
-      @isCpp = false
 
     super(editor)
 
