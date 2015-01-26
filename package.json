@@ -3,7 +3,7 @@
   "linter-package": true,
   "activationEvents": [],
   "main": "./lib/init",
-  "version": "2.19.0",
+  "version": "2.20.0",
   "description": "Lint C, C++, Obj-C, Obj-C++ on the fly using clang",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "clang-flags": "git://github.com/wanderer2/clang-flags.git"
+    "clang-flags": "git://github.com/wanderer2/clang-flags.git",
     "Linter": "git://github.com/AtomLinter/Linter.git"
   }
 }
