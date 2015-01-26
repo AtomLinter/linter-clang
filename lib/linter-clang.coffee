@@ -19,16 +19,22 @@ class LinterClang extends Linter
   errorStream: 'stderr'
 
   lintFile: (filePath, callback) ->
-    # parse space separated string
-    parseSpaceString = (string) ->
-      # split the include paths by space taking care of quotes
+    # NOTE: there is a difference between projectPath and @cwd
+    # projectPath is self explanatory, cwd is the path of the file being linted
+    # these are NOT the same things!
+    projectPath = atom.project.getPaths()[0]
+
+    # parse space separated string taking care of quotes
+    splitSpaceString = (string) ->
       regex = /[^\s"]+|"([^"]*)"/gi
       stringSplit = []
 
       loop
         match = regex.exec string
         if match
-          stringSplit.push(if match[1] then match[1] else match[0])
+          newItem = if match[1] then match[1] else match[0]
+          if newItem.length > 0
+              stringSplit.push(newItem)
         else
           break
 
@@ -43,7 +49,7 @@ class LinterClang extends Linter
     args.push '-fexceptions'
     args.push "-x#{@language}"
 
-    flagSplit = parseSpaceString switch @editor.getGrammar().name
+    flagSplit = splitSpaceString switch @editor.getGrammar().name
         when 'C++'           then atom.config.get 'linter-clang.clangDefaultCppFlags'
         when 'Objective-C++' then atom.config.get 'linter-clang.clangDefaultObjCppFlags'
         when 'C'             then atom.config.get 'linter-clang.clangDefaultCFlags'
@@ -59,31 +65,50 @@ class LinterClang extends Linter
     if atom.config.get 'linter-clang.clangCompleteFile'
       args.push ClangFlags.getClangFlags(@editor.getPath()).join
 
-    includePath = (base, pathArray, args) ->
+    includePaths = (base, pathArray) ->
       for ipath in pathArray
         if ipath.length > 0
           pathResolved = path.resolve(base, ipath)
-          args.push '-I'
-          args.push pathResolved
+          console.log "linter-clang: including #{pathResolved}" if atom.inDevMode()
+          args.push "-I#{pathResolved}"
 
     pathArray =
-      parseSpaceString atom.config.get 'linter-clang.clangIncludePaths'
+      splitSpaceString atom.config.get 'linter-clang.clangIncludePaths'
 
-    includePath @cwd, pathArray, args
+    includePaths @cwd, pathArray
 
-    # this function searched a directory for include path files
-    searchDirectory = (base, args) ->
+    # this function searches a directory for include path files
+    searchDirectory = (base) ->
       list = fs.readdirSync base
       for filename in list
-        stat = fs.statSync path.resolve(base, filename)
+        filenameResolved = path.resolve(base, filename)
+        stat = fs.statSync filenameResolved
         if stat.isDirectory()
-          searchDirectory path.resolve(base, filename), args
+          searchDirectory filenameResolved
         if stat.isFile() and filename is '.linter-clang-includes'
-          content = fs.readFileSync path.resolve(base, filename), 'utf8'
-          content = content.split("\n");
-          includePath base, content, args
+          console.log "linter-clang: found #{filenameResolved}" if atom.inDevMode()
+          content = fs.readFileSync filenameResolved, 'utf8'
+          ###
+            we have to parse it to enable using quotes and space.
+            we treat it as if every line had quotes around it
+            example:
+              $ cat .linter-clang-includes
+               path/to/bla
+               path/two/bla with spaces
+             -> results in:
+               content = '"path/to/bla" "path/two/bla with spaces"'
+             this will be taken by parseSpaceString appropriatly to:
+               content = ['path/to/bla', 'path/two/bla with spaces']
+             instead of
+               content = ['path/to/bla', 'path/two/bla', 'with', 'spaces'] # WRONG!!!
+          ###
+          content = "\"" + ((content.split "\n").join "\" \"") + "\""
+          contentSplit = splitSpaceString content
+          # dont give base as base parameter but the path of the resolved filename!!!
+          # so that all paths inside .linter-clang-includes will be relative to the file, not the project path!
+          includePaths (path.dirname filenameResolved), contentSplit
 
-    searchDirectory @cwd, args
+    searchDirectory projectPath
 
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
@@ -115,7 +140,7 @@ class LinterClang extends Linter
         @processMessage(output, callback)
 
     if atom.inDevMode()
-      console.log "clang: command = #{command}, args = #{args}, options = #{options}"
+      console.log "linter-clang: command = #{command}, args = #{args}, options = #{options}"
 
     new Process({command, args, options, stdout, stderr})
 
