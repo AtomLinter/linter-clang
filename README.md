@@ -1,28 +1,24 @@
 # linter-clang package
 
-This linter plugin for [Linter](https://github.com/AtomLinter/Linter) provides an interface to clang. It will be used with files that have the "C++", "C", "Objective-C" and "Objective-C++" syntax.
+This linter plugin for [Linter](https://github.com/AtomLinter/Linter) provides an interface to clang. It will be used with files that have the "C", "C++", "Objective-C", or "Objective-C" syntax.
 
 ## Installation
 Linter package must be installed in order to use this plugin. If Linter is not installed, please follow the instructions [here](https://github.com/AtomLinter/Linter).
 
 ### Plugin installation
-Press ctrl and ',' or cmd and ',' , click on 'Packages', search 'linter clang', or:
 ```
 $ apm install linter-clang
 ```
 
+### Select C / C++ linter
+- C linter, select C Grammar
+- C++ linter, select C++ Grammar
+- Objective-C linter, select Objective-C Grammar
+- Objective-C++ linter, select Objective-C++ Grammar
+
 ### Project-specific include paths
 If your project has some extra include directories, put them in a file called ".linter-clang-includes" and list them line by line or seperated by spaces.
 The linter will open the file in those directories and use the specified paths when linting in your project.
-
-You can put your ".linter-clang-includes" files in subdirectories, too, the linter will find it and include the paths relative to the file they are specified in.
-
-#### Macros
-
-The linter will expand the following macros in your ".linter-clang-includes" files:
- * %d -> the directory of the file being linted
- * %p -> the project path
- * %% -> %
 
 ## Contributing
 If you would like to contribute enhancements or fixes, please do the following:
