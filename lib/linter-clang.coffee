@@ -15,18 +15,13 @@ class LinterClang extends Linter
   # containing the command line (with arguments) used to lint.
 
   isCpp: false
-  clang: null
   @cmd: ''
-
-  executablePath: null
 
   editor: null
 
-  linterName: 'clang'
 
   errorStream: 'stderr'
 
-  fileName: ''
 
   lintFile: (filePath, callback) ->
     # parse space separated string
@@ -47,12 +42,10 @@ class LinterClang extends Linter
     @cmd = 'clang -fsyntax-only -fno-caret-diagnostics -fexceptions'
 
     {command, args} = @getCmdAndArgs(filePath)
-    @fileName = args[3]
-    args[3] = ''
 
-    command = @clang = atom.config.get 'linter-clang.clangCommand'
+    command = atom.config.get 'linter-clang.clangCommand'
     if atom.inDevMode()
-      console.log 'clang-command: ' + @clang
+      console.log 'clang-command: ' + command
 
     args.push '-x'
     args.push @language
@@ -129,8 +122,6 @@ class LinterClang extends Linter
       if @errorStream == 'stderr'
         @processMessage(output, callback)
 
-    args.push @fileName
-
     if atom.inDevMode()
       console.log "clang: command = #{command}, args = #{args}, options = #{options}"
 
@@ -157,12 +148,6 @@ class LinterClang extends Linter
       @isCpp = false
 
     super(editor)
-
-    atom.config.observe 'linter-clang.clangExecutablePath', =>
-      @executablePath = atom.config.get 'linter-clang.clangExecutablePath'
-
-  destroy: ->
-    atom.config.unobserve 'linter-clang.clangExecutablePath'
 
   createMessage: (match) ->
     # message might be empty, we have to supply a value
