@@ -16,8 +16,6 @@ class LinterClang extends Linter
 
   @cmd: ''
 
-  #editor: null
-
   errorStream: 'stderr'
 
   lintFile: (filePath, callback) ->
@@ -36,29 +34,20 @@ class LinterClang extends Linter
 
       return stringSplit
 
-    @cmd = 'clang -fsyntax-only -fno-caret-diagnostics -fexceptions'
+    @cmd = atom.config.get 'linter-clang.clangCommand'
 
     {command, args} = @getCmdAndArgs(filePath)
 
-    command = atom.config.get 'linter-clang.clangCommand'
-    if atom.inDevMode()
-      console.log 'clang-command: ' + command
+    args.push '-fsyntax-only'
+    args.push '-fno-caret-diagnostics'
+    args.push '-fexceptions'
+    args.push "-x#{@language}"
 
-    args.push '-x'
-    args.push @language
-
-    if @editor.getGrammar().name == 'C++'
-      flag = atom.config.get 'linter-clang.clangDefaultCppFlags'
-    else if @editor.getGrammar().name == 'Objective-C++'
-      flag = atom.config.get 'linter-clang.clangDefaultObjCppFlags'
-    else if @editor.getGrammar().name == 'C'
-      flag = atom.config.get 'linter-clang.clangDefaultCFlags'
-    else if @editor.getGrammar().name == 'Objective-C'
-      flag = atom.config.get 'linter-clang.clangDefaultObjCFlags'
-    else
-      console.log "linter-clang error: unknown grammar '#{editor.getGrammar().name}'"
-
-    flagSplit = parseSpaceString flag
+    flagSplit = parseSpaceString switch @editor.getGrammar().name
+        when 'C++'           then atom.config.get 'linter-clang.clangDefaultCppFlags'
+        when 'Objective-C++' then atom.config.get 'linter-clang.clangDefaultObjCppFlags'
+        when 'C'             then atom.config.get 'linter-clang.clangDefaultCFlags'
+        when 'Objective-C'   then atom.config.get 'linter-clang.clangDefaultObjCFlags'
 
     for customflag in flagSplit
       if customflag.length > 0
