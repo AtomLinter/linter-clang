@@ -24,6 +24,8 @@ class LinterClang extends Linter
     # these are NOT the same things!
     projectPath = atom.project.getPaths()[0]
 
+    verbose = atom.config.get 'linter-clang.verboseDebug'
+
     # parse space separated string taking care of quotes
     splitSpaceString = (string) ->
       regex = /[^\s"]+|"([^"]*)"/gi
@@ -46,6 +48,8 @@ class LinterClang extends Linter
 
     args.push '-fsyntax-only'
     args.push '-fno-caret-diagnostics'
+    args.push '-fno-diagnostics-fixit-info'
+    args.push '-fdiagnostics-print-source-range-info'
     args.push '-fexceptions'
     args.push "-x#{@language}"
 
@@ -61,6 +65,7 @@ class LinterClang extends Linter
 
     args.push "-ferror-limit=#{atom.config.get 'linter-clang.clangErrorLimit'}"
     args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
+    args.push '--verbose' if verbose
 
     if atom.config.get 'linter-clang.clangCompleteFile'
       args.push ClangFlags.getClangFlags(@editor.getPath()).join
@@ -73,7 +78,7 @@ class LinterClang extends Linter
           pathExpanded = pathExpanded.replace '%p', projectPath
           pathExpanded = pathExpanded.replace '%%', '%'
           pathResolved = path.resolve(base, pathExpanded)
-          console.log "linter-clang: including #{pathResolved}" if atom.inDevMode()
+          console.log "linter-clang: including #{ipath}, which expanded to #{pathResolved}" if atom.inDevMode() and verbose
           args.push "-I#{pathResolved}"
 
     pathArray =
@@ -90,7 +95,7 @@ class LinterClang extends Linter
         if stat.isDirectory()
           searchDirectory filenameResolved
         if stat.isFile() and filename is '.linter-clang-includes'
-          console.log "linter-clang: found #{filenameResolved}" if atom.inDevMode()
+          console.log "linter-clang: found #{filenameResolved}" if atom.inDevMode() and verbose
           content = fs.readFileSync filenameResolved, 'utf8'
           ###
             we have to parse it to enable using quotes and space.
@@ -117,7 +122,8 @@ class LinterClang extends Linter
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
     @regex = filePath.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") +
-    ':(?<line>\\d+):.+: .*((?<error>error)|(?<warning>warning)): (?<message>.*)'
+      ':(?<line>\\d+):(?<col>\\d+):(\{(?<lineStart>\\d+):(?<colStart>\\d+)\\-(?<lineEnd>\\d+):(?<colEnd>\\d+)\}.*:)? ' +
+      '((?<error>error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'linter-clang: is node executable: ' + @isNodeExecutable
