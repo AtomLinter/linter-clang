@@ -5,8 +5,8 @@ module.exports =
     clangSuppressWarnings: false
     clangDefaultCFlags: '-Wall'
     clangDefaultCppFlags: '-Wall -std=c++11'
-    clangDefaultObjCFlags: ''
-    clangDefaultObjCppFlags: ''
+    clangDefaultObjCFlags: ' '
+    clangDefaultObjCppFlags: ' '
     clangErrorLimit: 0
     clangCompleteFile: false
     verboseDebug: false
