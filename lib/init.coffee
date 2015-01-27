@@ -9,6 +9,7 @@ module.exports =
     clangDefaultObjCppFlags: ''
     clangErrorLimit: 0
     clangCompleteFile: false
+    verboseDebug: false
 
   activate: ->
     console.log 'activate linter-clang'
