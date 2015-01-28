@@ -11,18 +11,18 @@ Press ctrl and ',' or cmd and ',' , click on 'Packages', search 'linter clang', 
 $ apm install linter-clang
 ```
 
-### Project-specific include paths
-If your project has some extra include directories, put them in a file called ".linter-clang-includes" and list them line by line or seperated by spaces.
-The linter will open the file in those directories and use the specified paths when linting in your project.
+## Project-specific include paths
+If your project has some extra include directories, put them in a file called ".linter-clang-includes" and list them line by line.
+The linter will open the file and use the specified paths when linting in your project.
 
-You can put your ".linter-clang-includes" files in subdirectories, too, the linter will find it and include the paths relative to the file they are specified in.
+You can put your ".linter-clang-includes" files in subdirectories, too, the linter will find them and include the paths relative to the file they are specified in.
 
-#### Macros
+### Macros
 
 The linter will expand the following macros in your ".linter-clang-includes" files:
- * %d -> the directory of the file being linted
- * %p -> the project path
- * %% -> %
+ * `%d` -> the directory of the file being linted
+ * `%p` -> the project path
+ * `%%` -> `%`
 
 ## Contributing
 If you would like to contribute enhancements or fixes, please do the following:
@@ -41,9 +41,6 @@ Please note that modifications should follow these coding guidelines:
 
 Thank you for helping out!
 
-## TODO
-When there are errors in other files, sign them on the first line of the current file
-(Example: deleted constructor)
 ## Other Available linters
 - [linter-php](https://atom.io/packages/linter-php), for PHP using `php -l`
 - [linter-phpcs](https://atom.io/packages/linter-phpcs), for PHP, using `phpc`
