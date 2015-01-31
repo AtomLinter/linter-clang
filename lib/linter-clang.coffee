@@ -88,10 +88,18 @@ class LinterClang extends Linter
 
     # this function searches a directory for include path files
     searchDirectory = (base) ->
-      list = fs.readdirSync base
+      try
+        list = fs.readdirSync base
+      catch err
+        return
+        
       for filename in list
         filenameResolved = path.resolve(base, filename)
-        stat = fs.statSync filenameResolved
+        try
+          stat = fs.statSync filenameResolved
+        catch err
+          continue
+
         if stat.isDirectory()
           searchDirectory filenameResolved
         if stat.isFile() and filename is '.linter-clang-includes'
