@@ -3,7 +3,7 @@
   "linter-package": true,
   "activationEvents": [],
   "main": "./lib/init",
-  "version": "2.23.0",
+  "version": "2.24.0",
   "description": "Lint C, C++, Obj-C, Obj-C++ on the fly using clang",
   "repository": {
     "type": "git",
