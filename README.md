@@ -2,9 +2,6 @@
 
 This linter plugin for [Linter](https://github.com/AtomLinter/Linter) provides an interface to clang. It will be used with files that have the "C++", "C", "Objective-C" and "Objective-C++" syntax.
 
-## Installation
-Linter package must be installed in order to use this plugin. If Linter is not installed, please follow the instructions [here](https://github.com/AtomLinter/Linter).
-
 ### Plugin installation
 Press ctrl and ',' or cmd and ',' , click on 'Packages', search 'linter clang', or:
 ```
@@ -17,9 +14,21 @@ The linter will open the file and use the specified paths when linting in your p
 
 You can put your ".linter-clang-includes" files in subdirectories, too, the linter will find them and include the paths relative to the file they are specified in.
 
-### Macros
+## Project-specific compiler flags
+If your project has some extra compiler flags, put them in a file called ".linter-clang-flags" and list all flags.
+The linter will open the file and use the specified flags when linting in your project.
+You can put your flag file in subdirectories, too, however, no resolving of paths will take place.
+For that, you can use macros (see below).
 
-The linter will expand the following macros in your ".linter-clang-includes" files:
+Note: Whenever there is a space in the flag file it will separate the strings before and after
+when passing them as arguments to the compiler (like in the command line).
+If you have a filename with a space, put it into quotes. Everything between quotes won't
+be separated. The quotes will be removed after parsing.
+Using quotes is therefore not supported yet (TODO: let the user put a backslash to escape the quote).
+
+## Macros
+
+The linter will expand the following macros in your ".linter-clang-includes" and ".linter-clang-flags" files:
  * `%d` -> the directory of the file being linted
  * `%p` -> the project path
  * `%%` -> `%`

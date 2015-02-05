@@ -8,8 +8,7 @@ module.exports =
     clangDefaultObjCFlags: ' '
     clangDefaultObjCppFlags: ' '
     clangErrorLimit: 0
-    clangCompleteFile: false
     verboseDebug: false
 
   activate: ->
-    console.log 'activate linter-clang'
+    console.log 'activate linter-clang' if atom.inDevMode()

@@ -14,7 +14,6 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "clang-flags": "git://github.com/wanderer2/clang-flags.git",
     "Linter": "git://github.com/AtomLinter/Linter.git"
   }
 }

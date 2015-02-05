@@ -3,7 +3,6 @@ linterPath = atom.packages.getLoadedPackage("linter").path
 Linter = require "#{linterPath}/lib/linter"
 path = require 'path'
 fs = require 'fs'
-ClangFlags = require 'clang-flags'
 
 class LinterClang extends Linter
   # The syntax that the linter handles. May be a string or
@@ -53,32 +52,30 @@ class LinterClang extends Linter
     args.push '-fexceptions'
     args.push "-x#{@language}"
 
-    flagSplit = splitSpaceString switch @editor.getGrammar().name
+    defaultFlags = splitSpaceString switch @editor.getGrammar().name
         when 'C++'           then atom.config.get 'linter-clang.clangDefaultCppFlags'
         when 'Objective-C++' then atom.config.get 'linter-clang.clangDefaultObjCppFlags'
         when 'C'             then atom.config.get 'linter-clang.clangDefaultCFlags'
         when 'Objective-C'   then atom.config.get 'linter-clang.clangDefaultObjCFlags'
 
-    for customflag in flagSplit
-      if customflag.length > 0
-        args.push customflag
+    args.push defaultFlags
 
     args.push "-ferror-limit=#{atom.config.get 'linter-clang.clangErrorLimit'}"
     args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
     args.push '--verbose' if verbose
 
-    if atom.config.get 'linter-clang.clangCompleteFile'
-      args.push ClangFlags.getClangFlags(@editor.getPath()).join
+    expandMacros = (stringToExpand) =>
+      stringToExpand = stringToExpand.replace '%d', @cwd
+      stringToExpand = stringToExpand.replace '%p', projectPath
+      stringToExpand = stringToExpand.replace '%%', '%'
+      return stringToExpand
 
-    includePaths = (base, ipathArray) ->
+    includePaths = (base, ipathArray) =>
       for ipath in ipathArray
-        if ipath.length > 0
-          pathExpanded = ipath
-          pathExpanded = pathExpanded.replace '%d', @cwd
-          pathExpanded = pathExpanded.replace '%p', projectPath
-          pathExpanded = pathExpanded.replace '%%', '%'
+        if ipath
+          pathExpanded = expandMacros(ipath)
           pathResolved = path.resolve(base, pathExpanded)
-          console.log "linter-clang: including #{ipath}, which expanded to #{pathResolved}" if atom.inDevMode() and verbose
+          console.log "linter-clang: including #{ipath}, which expanded to #{pathResolved}" if atom.inDevMode()
           args.push "-I#{pathResolved}"
 
     pathArray =
@@ -87,12 +84,12 @@ class LinterClang extends Linter
     includePaths @cwd, pathArray
 
     # this function searches a directory for include path files
-    searchDirectory = (base) ->
+    searchDirectory = (base) =>
       try
         list = fs.readdirSync base
       catch err
         return
-        
+
       for filename in list
         filenameResolved = path.resolve(base, filename)
         try
@@ -103,7 +100,7 @@ class LinterClang extends Linter
         if stat.isDirectory()
           searchDirectory filenameResolved
         if stat.isFile() and filename is '.linter-clang-includes'
-          console.log "linter-clang: found #{filenameResolved}" if atom.inDevMode() and verbose
+          console.log "linter-clang: found #{filenameResolved}" if atom.inDevMode()
           content = fs.readFileSync filenameResolved, 'utf8'
           ###
             we have to parse it to enable using quotes and space.
@@ -119,11 +116,23 @@ class LinterClang extends Linter
              instead of
                content = ['path/to/bla', 'path/two/bla', 'with', 'spaces'] # WRONG!!!
           ###
-          content = "\"" + ((content.split "\n").join "\" \"") + "\""
+          # only use line which contain stuff
+          contentLines = (line for line in content.split "\n" when line)
+          console.log "TYPEOF #{typeof contentLines}"
+          # Glue them together using quotes
+          content = "\"" + (contentLines.join "\" \"") + "\""
           contentSplit = splitSpaceString content
           # dont give base as base parameter but the path of the resolved filename!!!
           # so that all paths inside .linter-clang-includes will be relative to the file, not the project path!
           includePaths (path.dirname filenameResolved), contentSplit
+        if stat.isFile() and filename is '.linter-clang-flags'
+          console.log "linter-clang: found #{filenameResolved}" if atom.inDevMode()
+          content = fs.readFileSync filenameResolved, 'utf8'
+          content = (content.split "\n").join " "
+          contentSplit = splitSpaceString content
+          contentExpanded = expandMacros flag for flag in contentSplit
+          console.log "linter-clang: add flags: #{contentExpanded}" if atom.inDevMode()
+          args.push contentExpanded
 
     searchDirectory projectPath
 
