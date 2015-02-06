@@ -75,7 +75,7 @@ class LinterClang extends Linter
         if ipath
           pathExpanded = expandMacros(ipath)
           pathResolved = path.resolve(base, pathExpanded)
-          console.log "linter-clang: including #{ipath}, which expanded to #{pathResolved}" if atom.inDevMode()
+          console.log "linter-clang: including #{ipath}, which expanded to #{pathResolved}" if atom.inDevMode() and verbose
           args.push "-I#{pathResolved}"
 
     pathArray =
@@ -130,7 +130,6 @@ class LinterClang extends Linter
           content = (content.split "\n").join " "
           contentSplit = splitSpaceString content
           contentExpanded = expandMacros flag for flag in contentSplit
-          console.log "linter-clang: add flags: #{contentExpanded}" if atom.inDevMode()
           args.push contentExpanded
 
     searchDirectory projectPath
