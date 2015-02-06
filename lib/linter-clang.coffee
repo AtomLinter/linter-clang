@@ -138,7 +138,7 @@ class LinterClang extends Linter
     # need to change filename a bit to fit into regex
     @regex = filePath.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") +
       ':(?<line>\\d+):(?<col>\\d+):(\{(?<lineStart>\\d+):(?<colStart>\\d+)\\-(?<lineEnd>\\d+):(?<colEnd>\\d+)\}.*:)? ' +
-      '((?<error>error)|(?<warning>warning)): (?<message>.*)'
+      '((?<error>(?:fatal )?error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'linter-clang: is node executable: ' + @isNodeExecutable
