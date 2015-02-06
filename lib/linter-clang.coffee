@@ -58,7 +58,7 @@ class LinterClang extends Linter
         when 'C'             then atom.config.get 'linter-clang.clangDefaultCFlags'
         when 'Objective-C'   then atom.config.get 'linter-clang.clangDefaultObjCFlags'
 
-    args.push defaultFlags
+    args.push dflag for dflag in defaultFlags
 
     args.push "-ferror-limit=#{atom.config.get 'linter-clang.clangErrorLimit'}"
     args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
@@ -118,7 +118,6 @@ class LinterClang extends Linter
           ###
           # only use line which contain stuff
           contentLines = (line for line in content.split "\n" when line)
-          console.log "TYPEOF #{typeof contentLines}"
           # Glue them together using quotes
           content = "\"" + (contentLines.join "\" \"") + "\""
           contentSplit = splitSpaceString content
