@@ -58,7 +58,7 @@ class LinterClang extends Linter
         when 'C'             then atom.config.get 'linter-clang.clangDefaultCFlags'
         when 'Objective-C'   then atom.config.get 'linter-clang.clangDefaultObjCFlags'
 
-    args.push defaultFlags
+    args.push dflag for dflag in defaultFlags
 
     args.push "-ferror-limit=#{atom.config.get 'linter-clang.clangErrorLimit'}"
     args.push '-w' if atom.config.get 'linter-clang.clangSuppressWarnings'
@@ -75,7 +75,7 @@ class LinterClang extends Linter
         if ipath
           pathExpanded = expandMacros(ipath)
           pathResolved = path.resolve(base, pathExpanded)
-          console.log "linter-clang: including #{ipath}, which expanded to #{pathResolved}" if atom.inDevMode()
+          console.log "linter-clang: including #{ipath}, which expanded to #{pathResolved}" if atom.inDevMode() and verbose
           args.push "-I#{pathResolved}"
 
     pathArray =
@@ -118,7 +118,6 @@ class LinterClang extends Linter
           ###
           # only use line which contain stuff
           contentLines = (line for line in content.split "\n" when line)
-          console.log "TYPEOF #{typeof contentLines}"
           # Glue them together using quotes
           content = "\"" + (contentLines.join "\" \"") + "\""
           contentSplit = splitSpaceString content
@@ -131,7 +130,6 @@ class LinterClang extends Linter
           content = (content.split "\n").join " "
           contentSplit = splitSpaceString content
           contentExpanded = expandMacros flag for flag in contentSplit
-          console.log "linter-clang: add flags: #{contentExpanded}" if atom.inDevMode()
           args.push contentExpanded
 
     searchDirectory projectPath
@@ -140,7 +138,7 @@ class LinterClang extends Linter
     # need to change filename a bit to fit into regex
     @regex = filePath.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") +
       ':(?<line>\\d+):(?<col>\\d+):(\{(?<lineStart>\\d+):(?<colStart>\\d+)\\-(?<lineEnd>\\d+):(?<colEnd>\\d+)\}.*:)? ' +
-      '((?<error>error)|(?<warning>warning)): (?<message>.*)'
+      '((?<error>(?:fatal )?error)|(?<warning>warning)): (?<message>.*)'
 
     if atom.inDevMode()
       console.log 'linter-clang: is node executable: ' + @isNodeExecutable
