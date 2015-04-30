@@ -41,7 +41,7 @@ class LinterClang extends Linter
 
       return stringSplit
 
-    @cmd = atom.config.get 'linter-clang.clangCommand'
+    @cmd = [ atom.config.get 'linter-clang.clangCommand' ]
 
     {command, args} = @getCmdAndArgs(filePath)
 
