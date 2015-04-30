@@ -45,6 +45,9 @@ class LinterClang extends Linter
 
     {command, args} = @getCmdAndArgs(filePath)
 
+    # Remove file path from args, it should be the last argument
+    args.shift()
+
     args.push '-fsyntax-only'
     args.push '-fno-caret-diagnostics'
     args.push '-fno-diagnostics-fixit-info'
@@ -133,6 +136,9 @@ class LinterClang extends Linter
           args.push contentExpanded
 
     searchDirectory projectPath
+
+    # Add file path as last argument
+    args.push filePath
 
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
