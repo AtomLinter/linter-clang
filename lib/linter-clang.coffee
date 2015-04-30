@@ -45,6 +45,10 @@ class LinterClang extends Linter
 
     {command, args} = @getCmdAndArgs(filePath)
 
+    # The args array contains the first argument which is the file path.
+    # We want the file path to be the last argument. We remove it and save it to tmp
+    tmp = args.pop()
+    
     args.push '-fsyntax-only'
     args.push '-fno-caret-diagnostics'
     args.push '-fno-diagnostics-fixit-info'
@@ -163,7 +167,10 @@ class LinterClang extends Linter
         console.warn 'clang: stderr', output
       if @errorStream == 'stderr'
         @processMessage(output, callback)
-
+    
+    # We add the file path argument to the end of the args array
+    args.push tmp
+    
     if atom.inDevMode()
       console.log "linter-clang: command = #{command}, args = #{args}, options = #{options}"
 
