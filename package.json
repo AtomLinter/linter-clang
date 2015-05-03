@@ -1,7 +1,7 @@
 {
   "name": "linter-clang",
   "linter-package": true,
-  "activationEvents": [],
+  "activationCommands": [],
   "main": "./lib/init",
   "version": "2.25.1",
   "description": "Lint C, C++, Obj-C, Obj-C++ on the fly using clang",
