@@ -15,6 +15,8 @@ class LinterClang extends Linter
 
   @cmd: ''
 
+  linterName: 'clang'
+
   errorStream: 'stderr'
 
   lintFile: (filePath, callback) ->
