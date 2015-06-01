@@ -15,6 +15,8 @@ class LinterClang extends Linter
 
   @cmd: ''
 
+  linterName: 'clang'
+
   errorStream: 'stderr'
 
   lintFile: (filePath, callback) ->
@@ -158,22 +160,30 @@ class LinterClang extends Linter
     # options for BufferedProcess, same syntax with child_process.spawn
     options = {cwd: @cwd}
 
+    result = []
+
+    aggregate = (messages) ->
+      result = result.concat messages
+
     stdout = (output) =>
       if atom.inDevMode()
         console.log 'clang: stdout', output
       if @errorStream == 'stdout'
-        @processMessage(output, callback)
+        @processMessage(output, aggregate)
 
     stderr = (output) =>
       if atom.inDevMode()
         console.warn 'clang: stderr', output
       if @errorStream == 'stderr'
-        @processMessage(output, callback)
+        @processMessage(output, aggregate)
 
     if atom.inDevMode()
       console.log "linter-clang: command = #{command}, args = #{args}, options = #{options}"
 
-    new Process({command, args, options, stdout, stderr})
+    exit = () ->
+      callback result
+
+    new Process({command, args, options, stdout, stderr, exit})
 
   constructor: (editor) ->
     @editor = editor
