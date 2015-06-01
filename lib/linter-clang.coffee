@@ -132,8 +132,8 @@ class LinterClang extends Linter
           content = fs.readFileSync filenameResolved, 'utf8'
           content = (content.split "\n").join " "
           contentSplit = splitSpaceString content
-          contentExpanded = expandMacros flag for flag in contentSplit
-          args.push contentExpanded
+          contentExpanded = (expandMacros flag for flag in contentSplit)
+          args.push contentExpanded...
 
     searchDirectory projectPath
 
