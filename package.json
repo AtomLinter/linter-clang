@@ -1,9 +1,8 @@
 {
   "name": "linter-clang",
-  "linter-package": true,
-  "main": "./lib/init",
+  "main": "./lib/linter-clang",
   "version": "2.26.0",
-  "description": "Lint C, C++, Obj-C, Obj-C++ on the fly using clang",
+  "description": "Lint C-based files using clang",
   "repository": {
     "type": "git",
     "url": "https://github.com/AtomLinter/linter-clang"
@@ -12,7 +11,14 @@
   "engines": {
     "atom": ">0.50.0"
   },
+  "providedServices": {
+    "linter-plus": {
+      "versions": {
+        "0.1.0": "provideLinter"
+      }
+    }
+  },
   "dependencies": {
-    "Linter": "git://github.com/AtomLinter/Linter.git"
+    "xregexp": "2.0.0"
   }
 }
