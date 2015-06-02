@@ -85,16 +85,16 @@ module.exports = LinterCrystal =
             if regex
               if regex.error
                 ToReturn.push(
-                  Type: 'Error',
-                  Message: regex.message,
-                  File: filePath
-                  Position: [[regex.line, regex.column], [regex.line, regex.column]]
+                  type: 'Error',
+                  message: regex.message,
+                  file: filePath
+                  position: [[regex.line, regex.column], [regex.line, regex.column]]
                 )
               if regex.warning
                 ToReturn.push(
-                  Type: 'Warning',
-                  Message: regex.message,
-                  File: filePath
-                  Position: [[regex.line, regex.col], [regex.line, regex.col]]
+                  type: 'Warning',
+                  message: regex.message,
+                  file: filePath
+                  position: [[regex.line, regex.col], [regex.line, regex.col]]
                 )
           Resolve(ToReturn)
