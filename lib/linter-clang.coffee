@@ -1,4 +1,4 @@
-module.exports = LinterCrystal =
+module.exports = LinterClang =
   config:
     command:
       type: 'string'
@@ -79,7 +79,7 @@ module.exports = LinterCrystal =
           Content = []
           for line in Data
             Content.push XRegExp.exec(line, regex)
-            console.log line# if atom.inDevMode()
+            console.log line if atom.inDevMode()
           ToReturn = []
           Content.forEach (regex) ->
             if regex
