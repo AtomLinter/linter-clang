@@ -12,9 +12,9 @@
     "atom": ">0.50.0"
   },
   "providedServices": {
-    "linter-plus": {
+    "linter": {
       "versions": {
-        "0.1.0": "provideLinter"
+        "0.3.0": "provideLinter"
       }
     }
   },

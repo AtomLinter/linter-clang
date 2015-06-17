@@ -29,25 +29,25 @@ module.exports = LinterClang =
       default: false
 
   activate: ->
-    console.log 'activate linter-clang' if atom.inDevMode()
     unless atom.packages.getLoadedPackages 'linter-plus'
       @showError '[linter-clang] `linter-plus` package not found, please install it'
 
   showError: (message = '') ->
     atom.notifications.addError message
 
-  provideLinter: ->
-    {
-      scopes: ['source.c', 'source.cpp', 'source.objc', 'source.objcpp']
-      lint: @lint
-    }
+  provideLinter: -> {
+    grammarScopes: ['source.c', 'source.cpp', 'source.objc', 'source.objcpp']
+    scope: 'file'
+    lint: @lint
+    lintOnFly: false
+  }
 
   lint: (TextEditor) ->
     cp = require 'child_process'
     path = require 'path'
     XRegExp = require('xregexp').XRegExp
 
-    regex = XRegExp('(?<file>.+):(?<line>\\d+):(?<col>\\d+):(\{(?<lineStart>\\d+):(?<colStart>\\d+)\\-(?<lineEnd>\\d+):(?<colEnd>\\d+)\}.*:)? (?<type>\\w+): (?<message>.*)')
+    regex = XRegExp('(?<file>.+):(?<line>\\d+):(?<col>\\d+):(\{(?<lineStart>\\d+):(?<colStart>\\d+)\\-(?<lineEnd>\\d+):(?<colEnd>\\d+)\}.*:)?\\s(?<type>.+):\\s(?<message>.*)')
 
     return new Promise (Resolve) ->
       filePath = TextEditor.getPath()
@@ -65,6 +65,7 @@ module.exports = LinterClang =
         cmd = "#{cmd} -fexceptions"
         cmd = "#{cmd} -x#{@language}"
         cmd = "#{cmd} #{path.basename(filePath)}"
+        console.log "linter-clang command: #{cmd}" if atom.inDevMode()
         Data = []
 
         process = cp.exec(cmd, {cwd: path.dirname(filePath)})
@@ -73,7 +74,7 @@ module.exports = LinterClang =
           Content = []
           for line in Data
             Content.push XRegExp.exec(line, regex)
-            console.log line if atom.inDevMode()
+            console.log "linter-clang command output: #{line}" if atom.inDevMode()
           ToReturn = []
           Content.forEach (regex) ->
             if regex
@@ -81,8 +82,18 @@ module.exports = LinterClang =
               console.log "linter-clang type: #{regex.type}" if atom.inDevMode()
               ToReturn.push(
                 type: regex.type,
-                message: regex.message,
-                file: path.join(path.dirname(filePath), regex.file).normalize()
-                position: [[regex.line, regex.column], [regex.line, regex.column]]
+                text: regex.message,
+                filePath: path.join(path.dirname(filePath), regex.file).normalize(),
+                range: (if regex.lineStart && regex.colStart && regex.lineEnd && regex.colEnd
+                  [
+                    [regex.line, regex.col],
+                    [regex.line, regex.col]
+                  ]
+                else
+                  [
+                    [regex.lineStart, regex.colStart],
+                    [regex.lineEnd, regex.colEnd]
+                  ]
+                )
               )
           Resolve(ToReturn)
