@@ -18,9 +18,6 @@
       }
     }
   },
-  "dependencies": {
-    "xregexp": "2.0.0"
-  },
   "coffeelintConfig": {
     "arrow_spacing": {
       "name": "arrow_spacing",

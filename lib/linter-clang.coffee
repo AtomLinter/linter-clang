@@ -1,3 +1,6 @@
+child_process = require 'child_process'
+path = require 'path'
+
 module.exports = LinterClang =
   config:
     command:
@@ -30,10 +33,7 @@ module.exports = LinterClang =
 
   activate: ->
     unless atom.packages.getLoadedPackages 'linter-plus'
-      @showError '[linter-clang] `linter-plus` package not found, please install it'
-
-  showError: (message = '') ->
-    atom.notifications.addError message
+      atom.notifications.addError '[linter-clang] `linter-plus` package not found, please install it'
 
   provideLinter: -> {
     grammarScopes: ['source.c', 'source.cpp', 'source.objc', 'source.objcpp']
@@ -43,15 +43,18 @@ module.exports = LinterClang =
   }
 
   lint: (TextEditor) ->
-    cp = require 'child_process'
-    path = require 'path'
-    XRegExp = require('xregexp').XRegExp
-
-    regex = XRegExp('(?<file>.+):(?<line>\\d+):(?<col>\\d+):(\{(?<lineStart>\\d+):(?<colStart>\\d+)\\-(?<lineEnd>\\d+):(?<colEnd>\\d+)\}.*:)?\\s(?<type>.+):\\s(?<message>.*)')
-
+    regex = ///
+      (.+): #File with issue
+      (\d+): #Line with issue
+      (\d+):\s #Column with issue
+      (.+):\s+ #Type of issue
+      (.*) #Message explaining issue
+    ///
     return new Promise (Resolve) ->
       filePath = TextEditor.getPath()
       if filePath # Files that have not be saved
+        file = path.basename(filePath)
+        cwd = path.dirname(filePath)
         @language = 'c++' if TextEditor.getGrammar().name == 'C++'
         @language = 'objective-c++' if TextEditor.getGrammar().name == 'Objective-C++'
         @language = 'c' if TextEditor.getGrammar().name == 'C'
@@ -64,36 +67,21 @@ module.exports = LinterClang =
         cmd = "#{cmd} -fdiagnostics-print-source-range-info"
         cmd = "#{cmd} -fexceptions"
         cmd = "#{cmd} -x#{@language}"
-        cmd = "#{cmd} #{path.basename(filePath)}"
+        cmd = "#{cmd} #{file}"
         console.log "linter-clang command: #{cmd}" if atom.inDevMode()
-        Data = []
-
-        process = cp.exec(cmd, {cwd: path.dirname(filePath)})
-        process.stderr.on 'data', (data) -> Data.push(data.toString())
+        data = []
+        process = child_process.exec(cmd, {cwd: path.dirname(filePath)})
+        process.stderr.on 'data', (d) -> data.push d.toString()
         process.on 'close', ->
-          Content = []
-          for line in Data
-            Content.push XRegExp.exec(line, regex)
+          toReturn = []
+          for line in data
             console.log "linter-clang command output: #{line}" if atom.inDevMode()
-          ToReturn = []
-          Content.forEach (regex) ->
-            if regex
-              console.log "linter-clang file: #{regex.file}" if atom.inDevMode()
-              console.log "linter-clang type: #{regex.type}" if atom.inDevMode()
-              ToReturn.push(
-                type: regex.type,
-                text: regex.message,
-                filePath: path.join(path.dirname(filePath), regex.file).normalize(),
-                range: (if regex.lineStart && regex.colStart && regex.lineEnd && regex.colEnd
-                  [
-                    [regex.line, regex.col],
-                    [regex.line, regex.col]
-                  ]
-                else
-                  [
-                    [regex.lineStart, regex.colStart],
-                    [regex.lineEnd, regex.colEnd]
-                  ]
-                )
+            if line.match regex
+              [file, line, column, type, message] = line.match(regex)[1..5]
+              toReturn.push(
+                type: type,
+                text: message,
+                filePath: path.join(cwd, file).normalize()
+                range: [[line - 1, column - 1], [line - 1, column - 1]]
               )
-          Resolve(ToReturn)
+          Resolve(toReturn)
