@@ -11,8 +11,5 @@
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
-  },
-  "dependencies": {
-    "Linter": "git://github.com/AtomLinter/Linter.git"
   }
 }
