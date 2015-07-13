@@ -2,7 +2,7 @@
   "name": "linter-clang",
   "linter-package": true,
   "main": "./lib/init",
-  "version": "2.26.1",
+  "version": "2.26.2",
   "description": "Lint C, C++, Obj-C, Obj-C++ on the fly using clang",
   "repository": {
     "type": "git",
