@@ -142,6 +142,8 @@ class LinterClang extends Linter
     # Add file path as last argument
     args.push filePath
 
+    # Remove the cached regex added in AtomLinter/Linter#693
+    delete @MessageRegexp
     # add file to regex to filter output to this file,
     # need to change filename a bit to fit into regex
     @regex = filePath.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") +
