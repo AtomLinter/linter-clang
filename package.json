@@ -11,5 +11,8 @@
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
-  }
+  },
+  "dependencies": {
+    "clang-flags": "0.2.2"
+  },
 }
