@@ -1,6 +1,6 @@
 {
   "name": "linter-clang",
-  "main": "./lib/linter-clang",
+  "main": "./lib/main",
   "version": "2.26.0",
   "description": "Lint C-based files using clang",
   "repository": {
@@ -14,50 +14,27 @@
   "providedServices": {
     "linter": {
       "versions": {
-        "0.3.0": "provideLinter"
+        "1.0.0": "provideLinter"
       }
     }
   },
-  "coffeelintConfig": {
-    "arrow_spacing": {
-      "name": "arrow_spacing",
-      "level": "error"
+  "dependencies": {
+    "atom-linter": "^2.0.5"
+  },
+  "devDependencies": {
+    "eslint": "latest"
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
     },
-    "ensure_comprehensions": {
-      "name": "ensure_comprehensions",
-      "level": "error"
+    "ecmaFeatures": {
+      "modules": true
     },
-    "max_line_length": {
-      "name": "max_line_length",
-      "value": 120,
-      "level": "error",
-      "limitComments": true
-    },
-    "indentation": {
-      "name": "indentation",
-      "value": 2,
-      "level": "error"
-    },
-    "no_empty_param_list": {
-      "name": "no_empty_param_list",
-      "level": "error"
-    },
-    "cyclomatic_complexity": {
-      "name": "cyclomatic_complexity",
-      "value": 22,
-      "level": "error"
-    },
-    "no_unnecessary_fat_arrows": {
-      "name": "no_unnecessary_fat_arrows",
-      "level": "error"
-    },
-    "space_operators": {
-      "name": "space_operators",
-      "level": "error"
-    },
-    "spacing_after_comma": {
-      "name": "spacing_after_comma",
-      "level": "error"
+    "globals": {
+      "atom": true
     }
   }
 }
