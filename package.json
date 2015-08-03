@@ -19,7 +19,8 @@
     }
   },
   "dependencies": {
-    "atom-linter": "^2.0.5"
+    "atom-linter": "^2.0.5",
+    "clang-flags": "^0.2.2"
   },
   "devDependencies": {
     "eslint": "latest"
