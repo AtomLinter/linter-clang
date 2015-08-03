@@ -1,7 +1,7 @@
 {
   "name": "linter-clang",
   "main": "./lib/main",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Lint C-based files using clang",
   "repository": {
     "type": "git",
