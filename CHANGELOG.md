@@ -1,8 +1,11 @@
-# v2.7.0
+# v2.26.2
+- Fix
 
-### Bug Fixes
-* Fix README.md
-* Fix CHANGELOG.md
+# v2.26.1
+- Fix Linter install in certain cases.
+ 
+# v2.7.0-v2.25.0
+- **Change in management. Will document later.**
 
 # v2.6.0
 
