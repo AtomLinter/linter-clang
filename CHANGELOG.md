@@ -1,5 +1,8 @@
 # `linter-clang` follows [semantic versioning](http://semver.org/)
 
+## v3.1.3
+- Fix flags parsing.
+
 ## v3.1.2
 - Clean up some repo level documentation. (README and CHANGLOG)
 
@@ -19,7 +22,7 @@
 
 ## v2.26.1
 - Fix Linter install in certain cases.
- 
+
 ## v2.7.0-v2.25.0
 - **Change in management. Will document later.**
 
