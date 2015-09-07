@@ -1,5 +1,7 @@
 "use babel";
 
+provider = require("../lib/main").provideLinter();
+
 describe("The Clang Provider for AtomLinter", () => {
   beforeEach(() => {
     waitsForPromise(() => {
@@ -8,10 +10,12 @@ describe("The Clang Provider for AtomLinter", () => {
   });
 
   describe("finds issue with the code", () => {
-    describe("in 'missing_import.c'", () => {
-      beforeEach(() => {
-        waitsForPromise(() => {
-          atom.workspace.open("missing_import.c");
+    it("in 'missing_import.c'", () => {
+      waitsForPromise(() => {
+        atom.workspace.open("missing_import.c").then((editor) => {
+          provider.lint(editor).then((messages) => {
+            expect(messages[0].text).toEqual("'nothing.h' file not found");
+          });
         });
       });
     });
