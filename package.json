@@ -1,7 +1,7 @@
 {
   "name": "linter-clang",
-  "main": "./lib/linter-clang",
-  "version": "2.26.0",
+  "main": "./lib/main",
+  "version": "3.2.0",
   "description": "Lint C-based files using clang",
   "repository": {
     "type": "git",
@@ -12,55 +12,34 @@
     "atom": ">0.50.0"
   },
   "providedServices": {
-    "linter-plus": {
+    "linter": {
       "versions": {
-        "0.1.0": "provideLinter"
+        "1.0.0": "provideLinter"
       }
     }
   },
   "dependencies": {
-    "xregexp": "2.0.0"
+    "atom-linter": "^2.0.5",
+    "atom-package-deps": "^2.0.1",
+    "clang-flags": "^0.2.2"
   },
-  "coffeelintConfig": {
-    "arrow_spacing": {
-      "name": "arrow_spacing",
-      "level": "error"
+  "devDependencies": {
+    "eslint": "latest"
+  },
+  "packages-dep": [
+    "linter"
+  ],
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true
     },
-    "ensure_comprehensions": {
-      "name": "ensure_comprehensions",
-      "level": "error"
+    "ecmaFeatures": {
+      "modules": true
     },
-    "max_line_length": {
-      "name": "max_line_length",
-      "value": 120,
-      "level": "error",
-      "limitComments": true
-    },
-    "indentation": {
-      "name": "indentation",
-      "value": 2,
-      "level": "error"
-    },
-    "no_empty_param_list": {
-      "name": "no_empty_param_list",
-      "level": "error"
-    },
-    "cyclomatic_complexity": {
-      "name": "cyclomatic_complexity",
-      "value": 22,
-      "level": "error"
-    },
-    "no_unnecessary_fat_arrows": {
-      "name": "no_unnecessary_fat_arrows",
-      "level": "error"
-    },
-    "space_operators": {
-      "name": "space_operators",
-      "level": "error"
-    },
-    "spacing_after_comma": {
-      "name": "spacing_after_comma",
-      "level": "error"
+    "globals": {
+      "atom": true
     }
   }
 }
