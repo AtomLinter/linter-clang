@@ -23,7 +23,7 @@
     "atom-package-deps": "^2.0.1",
     "clang-flags": "^0.2.2"
   },
-  "packages-dep": [
+  "packages-deps": [
     "linter"
   ],
   "eslintConfig": {
