@@ -22,7 +22,8 @@
     "atom-linter": "^2.0.5",
     "atom-package-deps": "^2.0.1",
     "clang-flags": "^0.2.2",
-    "libclang": "0.0.11"
+    "libclang": "0.0.11",
+    "ref": "^1.2.0"
   },
   "packages-deps": [
     "linter"
