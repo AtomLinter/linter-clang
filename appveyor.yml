@@ -7,7 +7,7 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
   - "%LOCALAPPDATA%/atom/bin/apm clean"
   - "%LOCALAPPDATA%/atom/bin/apm install"
-  - choco install https://chocolatey.org/api/v2/package/clang/3.6.0 -y --pre
+  - choco install clang.3.6.0.nupkg -y --pre
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
