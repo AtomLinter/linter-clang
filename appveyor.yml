@@ -7,7 +7,7 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
   - "%LOCALAPPDATA%/atom/bin/apm clean"
   - "%LOCALAPPDATA%/atom/bin/apm install"
-  - iex ((new-object net.webclient).DownloadString('http://llvm.org/releases/3.7.0/LLVM-3.7.0-win32.exe'))
+  - PS:\>iex ((new-object net.webclient).DownloadString('http://llvm.org/releases/3.7.0/LLVM-3.7.0-win32.exe'))
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
