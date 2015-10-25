@@ -1,6 +1,6 @@
 # linter-clang
 
-[![Travis.ci Shield](https://img.shields.io/travis/AtomLinter/linter-clang.svg?style=flat-square)](https://travis-ci.org/AtomLinter/linter-clang)
+[![Travis.ci Shield](https://img.shields.io/travis/AtomLinter/linter-clang/master.svg?style=flat-square&label=os%20x)](https://travis-ci.org/AtomLinter/linter-clang)
 
 This linter plugin for [Linter](https://github.com/AtomLinter/Linter) provides an interface to clang. It will be used with files that have the "C++", "C", "Objective-C" and "Objective-C++" syntax.
 
