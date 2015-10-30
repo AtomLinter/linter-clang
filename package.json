@@ -23,7 +23,9 @@
     "atom-package-deps": "^2.0.1",
     "clang-flags": "^0.2.2",
     "ffi": "^2.0.0",
-    "ref": "^1.2.0"
+    "ref": "^1.2.0",
+    "ref-array": "^1.1.2",
+    "ref-struct": "^1.0.2"
   },
   "packages-deps": [
     "linter"
