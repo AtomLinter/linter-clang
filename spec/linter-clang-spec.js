@@ -8,7 +8,9 @@ describe('The Clang provider for AtomLinter', () => {
       return atom.packages.activatePackage("linter-clang")
     })
     if (process.env.CI === true) {
+      console.log("Unit Tests running in a Continuous Integration environment.");
       if (process.platform === "darwin") {
+        console.log("Unit Tests running on OS X.");
         atom.config.set("linter-clang.libraryPath", "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib")
       }
     }
