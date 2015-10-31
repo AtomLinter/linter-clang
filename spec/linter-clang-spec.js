@@ -7,7 +7,7 @@ describe('The Clang provider for AtomLinter', () => {
     waitsForPromise(() => {
       return atom.packages.activatePackage("linter-clang")
     })
-    if (process.env.CI === true) {
+    if (process.env.CI) {
       console.log("Unit Tests running in a Continuous Integration environment.");
       if (process.platform === "darwin") {
         console.log("Unit Tests running on OS X.");
