@@ -7,6 +7,11 @@ describe('The Clang provider for AtomLinter', () => {
     waitsForPromise(() => {
       return atom.packages.activatePackage("linter-clang")
     })
+    if (process.env.CI === true) {
+      if (process.platform === "darwin") {
+        atom.config.set("linter-clang.libraryPath", "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib")
+      }
+    }
   })
 
   it('finds a fatal error in "missing_import.c"', () => {
