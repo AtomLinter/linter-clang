@@ -17,7 +17,24 @@ $ apm install linter-clang
 This package will ensure that all dependencies are installed on activation.
 
 ## Project-specific settings
+
+### .clang_complete
 If your project has some extra include directories, put them in a file called ".clang_complete" and list them line by line.
 The linter will open the file and use the specified paths when linting in your project.
 
-As well the [Clang JSON Compilation Database](http://clang.llvm.org/docs/JSONCompilationDatabase.html) is a supported format for project specific settings.
+```
+-Iinclude
+-Ilib/foo/include
+```
+Please note the file should contain one command line argument per line.
+These arguments are passed to clang directly using exec and not via a shell.
+Therefore any spaces are treated as a part of the command line argument.
+
+This means on the one hand `-I include` results in clang using ` include` (note the space at the beginning) as include directory.
+For the same reason `-I include -I lib/foo/include` causes clang to search for includes in ` include -I lib/foo/include`.
+
+On the other hand if your path contains spaces you must not escape them or put quotes around the path.
+For example: `-Ilib/dir with spaces/include` only works without any quotes or escaping.
+
+### Clang JSON Compilation Database
+The [Clang JSON Compilation Database](http://clang.llvm.org/docs/JSONCompilationDatabase.html) is also a supported format for project specific settings.
