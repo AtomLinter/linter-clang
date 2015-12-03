@@ -56,4 +56,48 @@ describe('The Clang provider for AtomLinter', () => {
       })
     })
   })
+
+  it('finds a pragma once warning in "with_pragma_once.c"', () => {
+    waitsForPromise(() => {
+      return atom.workspace.open(__dirname + '/files/with_pragma_once.c').then(editor => {
+        return lint(editor).then(messages => {
+          expect(messages.length).toEqual(1)
+          expect(messages[0].type).toEqual("warning")
+          expect(messages[0].text).toEqual("#pragma once in main file")
+        })
+      })
+    })
+  })
+
+  it('finds a pragma once warning in "with_pragma_once.cpp"', () => {
+    waitsForPromise(() => {
+      return atom.workspace.open(__dirname + '/files/with_pragma_once.cpp').then(editor => {
+        return lint(editor).then(messages => {
+          expect(messages.length).toEqual(1)
+          expect(messages[0].type).toEqual("warning")
+          expect(messages[0].text).toEqual("#pragma once in main file")
+        })
+      })
+    })
+  })
+
+  it('doesn\'t find a pragma once warning in "with_pragma_once.h"', () => {
+    waitsForPromise(() => {
+      return atom.workspace.open(__dirname + '/files/with_pragma_once.h').then(editor => {
+        return lint(editor).then(messages => {
+          expect(messages.length).toEqual(0)
+        })
+      })
+    })
+  })
+
+  it('doesn\'t find a pragma once warning in "with_pragma_once.hpp"', () => {
+    waitsForPromise(() => {
+      return atom.workspace.open(__dirname + '/files/with_pragma_once.hpp').then(editor => {
+        return lint(editor).then(messages => {
+          expect(messages.length).toEqual(0)
+        })
+      })
+    })
+  })
 })
