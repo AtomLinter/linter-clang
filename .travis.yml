@@ -33,6 +33,6 @@ addons:
 deploy:
   provider: script
   skip_cleanup: true
-  script: .travis/deploy.sh
+  script: $APM_SCRIPT_PATH
   on:
     tags: true
