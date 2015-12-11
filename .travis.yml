@@ -29,3 +29,9 @@ addons:
     - git
     - libgnome-keyring-dev
     - fakeroot
+    
+deploy:
+  provider: script
+  script: apm publish
+  on:
+  	tags: true
