@@ -32,6 +32,6 @@ addons:
     
 deploy:
   provider: script
-  script: apm publish
+  script: .travis/deploy.sh
   on:
     tags: true
