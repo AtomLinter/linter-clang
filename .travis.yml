@@ -32,6 +32,7 @@ addons:
     
 deploy:
   provider: script
+  skip_cleanup: true
   script: .travis/deploy.sh
   on:
     tags: true
