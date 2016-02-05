@@ -29,10 +29,13 @@ addons:
     - git
     - libgnome-keyring-dev
     - fakeroot
-    
+
 deploy:
-  provider: script
-  skip_cleanup: true
-  script: $APM_SCRIPT_PATH
+  provider: apm
+  api_key:
+    secure: "MvxKJAUglt0zbMBMOEaJFwqK8ptYlJD1mSyTNZ7x0T02CdST4Fx70AK3x79odI0o8YUGrLKfFdJyBrGkme9ainYDeomIu0O4QTZ2tGdpLsbTop4dDnQbYjyba/gI6aK+4x9WJ167CY3bYLs+0w3P4HMhtvsvQuLAhpZqbZykOgQ="
+  edge:
+    source: kepler0/dpl
+    branch: apm
   on:
     tags: true
