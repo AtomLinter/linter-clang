@@ -1,5 +1,9 @@
 "use babel";
 
+import * as path from 'path';
+
+const miPath = path.join(__dirname, 'files', 'missing_import');
+
 describe('The Clang provider for AtomLinter', () => {
   const lint = require('../lib/main').provideLinter().lint
 
@@ -11,7 +15,7 @@ describe('The Clang provider for AtomLinter', () => {
 
   it('finds a fatal error in "missing_import.c"', () => {
     waitsForPromise(() => {
-      return atom.workspace.open(__dirname + '/files/missing_import.c').then(editor => {
+      return atom.workspace.open(miPath + '.c').then(editor => {
         return lint(editor).then(messages => {
           expect(messages.length).toEqual(1)
           expect(messages[0].type).toEqual("fatal error")
@@ -23,7 +27,7 @@ describe('The Clang provider for AtomLinter', () => {
 
   it('finds a fatal error in "missing_import.cpp"', () => {
     waitsForPromise(() => {
-      return atom.workspace.open(__dirname + '/files/missing_import.cpp').then(editor => {
+      return atom.workspace.open(miPath + '.cpp').then(editor => {
         return lint(editor).then(messages => {
           expect(messages.length).toEqual(1)
           expect(messages[0].type).toEqual("fatal error")
@@ -35,7 +39,7 @@ describe('The Clang provider for AtomLinter', () => {
 
   it('finds a fatal error in "missing_import.m"', () => {
     waitsForPromise(() => {
-      return atom.workspace.open(__dirname + '/files/missing_import.m').then(editor => {
+      return atom.workspace.open(miPath + '.m').then(editor => {
         return lint(editor).then(messages => {
           expect(messages.length).toEqual(1)
           expect(messages[0].type).toEqual("fatal error")
@@ -47,7 +51,7 @@ describe('The Clang provider for AtomLinter', () => {
 
   it('finds a fatal error in "missing_import.mm"', () => {
     waitsForPromise(() => {
-      return atom.workspace.open(__dirname + '/files/missing_import.mm').then(editor => {
+      return atom.workspace.open(miPath + '.mm').then(editor => {
         return lint(editor).then(messages => {
           expect(messages.length).toEqual(1)
           expect(messages[0].type).toEqual("fatal error")
