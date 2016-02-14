@@ -1,15 +1,4 @@
-notifications:
-  email:
-    on_success: never
-    on_failure: change
-
-script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
-
-git:
-  depth: 10
-
-sudo: false
-
+# Project specific config
 os:
   - linux
   - osx
@@ -22,14 +11,6 @@ env:
     - ATOM_CHANNEL=stable
     - ATOM_CHANNEL=beta
 
-addons:
-  apt:
-    packages:
-    - build-essential
-    - git
-    - libgnome-keyring-dev
-    - fakeroot
-
 deploy:
   provider: apm
   api_key:
@@ -39,3 +20,28 @@ deploy:
     branch: apm
   on:
     tags: true
+
+# Generic setup follows
+script: 'curl -s https://raw.githubusercontent.com/atom/ci/master/build-package.sh | sh'
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+git:
+  depth: 10
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+    - build-essential
+    - git
+    - libgnome-keyring-dev
+    - fakeroot
+
+branches:
+  only:
+    - master
