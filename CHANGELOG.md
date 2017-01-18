@@ -2,6 +2,10 @@
 
 _`linter-clang` follows [semantic versioning](http://semver.org/)_
 
+## v3.4.6
+
+-   Fix linting valid files
+
 ## v3.4.5
 
 -   Update dependencies
