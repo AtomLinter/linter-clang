@@ -2,6 +2,16 @@
 
 _`linter-clang` follows [semantic versioning](http://semver.org/)_
 
+## v3.4.5
+
+-   Update dependencies
+-   Remove unused styles
+-   Fix specs
+
+## v3.1.3 - v3.4.4
+
+-   _Undocumented..._
+
 ## v3.1.3
 
 -   Fix flags parsing.
