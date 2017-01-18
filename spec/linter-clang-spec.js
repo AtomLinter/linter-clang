@@ -3,6 +3,7 @@
 import * as path from 'path';
 
 const miPath = path.join(__dirname, 'files', 'missing_import');
+const validPath = path.join(__dirname, 'files', 'valid.c');
 
 describe('The Clang provider for AtomLinter', () => {
   const lint = require('../lib/main').provideLinter().lint
@@ -11,6 +12,16 @@ describe('The Clang provider for AtomLinter', () => {
     waitsForPromise(() => {
       return atom.packages.activatePackage("linter-clang")
     })
+  })
+
+  it('finds nothing wrong with a valid file', () => {
+    waitsForPromise(() =>
+      atom.workspace.open(validPath).then(editor =>
+        lint(editor).then((messages) => {
+          expect(messages.length).toBe(0)
+        })
+      )
+    )
   })
 
   it('finds a fatal error in "missing_import.c"', () => {
