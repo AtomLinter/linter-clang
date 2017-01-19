@@ -11,6 +11,10 @@
   "engines": {
     "atom": ">0.50.0"
   },
+  "scripts": {
+    "test": "apm test",
+    "lint": "eslint ."
+  },
   "providedServices": {
     "linter": {
       "versions": {
@@ -23,20 +27,33 @@
     "atom-package-deps": "^4.0.1",
     "clang-flags": "^0.2.2"
   },
+  "devDependencies": {
+    "eslint": "^3.13.0",
+    "eslint-config-airbnb-base": "^11.0.1",
+    "eslint-plugin-import": "^2.2.0"
+  },
   "packages-deps": [
     "linter"
   ],
   "eslintConfig": {
-    "env": {
-      "es6": true,
-      "browser": true,
-      "node": true
-    },
-    "ecmaFeatures": {
-      "modules": true
+    "extends": "airbnb-base",
+    "rules": {
+      "global-require": "off",
+      "import/no-unresolved": [
+        "error",
+        {
+          "ignore": [
+            "atom"
+          ]
+        }
+      ]
     },
     "globals": {
       "atom": true
+    },
+    "env": {
+      "browser": true,
+      "node": true
     }
   }
 }
