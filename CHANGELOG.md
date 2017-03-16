@@ -2,6 +2,10 @@
 
 _`linter-clang` follows [semantic versioning](http://semver.org/)_
 
+## v3.4.9
+
+-   Fix declaration of member functions
+
 ## v3.4.8
 
 -   Fix package dependency specification
