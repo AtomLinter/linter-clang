@@ -12,7 +12,7 @@
     "atom": ">=1.4.0 <2.0.0"
   },
   "configSchema": {
-    "execPath": {
+    "executablePath": {
       "type": "string",
       "default": "clang"
     },
