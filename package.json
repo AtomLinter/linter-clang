@@ -54,13 +54,13 @@
   "providedServices": {
     "linter": {
       "versions": {
-        "1.0.0": "provideLinter"
+        "2.0.0": "provideLinter"
       }
     }
   },
   "dependencies": {
     "atom-linter": "^9.0.0",
-    "atom-package-deps": "^4.0.1",
+    "atom-package-deps": "^4.5.0",
     "clang-flags": "^0.2.2"
   },
   "devDependencies": {
@@ -70,7 +70,7 @@
     "jasmine-fix": "^1.0.1"
   },
   "package-deps": [
-    "linter"
+    "linter:2.0.0"
   ],
   "eslintConfig": {
     "extends": "airbnb-base",

@@ -26,32 +26,40 @@ describe('The Clang provider for AtomLinter', () => {
       const editor = await atom.workspace.open(`${miPath}.c`);
       const messages = await lint(editor);
       expect(messages.length).toBe(1);
-      expect(messages[0].type).toBe('fatal error');
-      expect(messages[0].text).toBe("'nothing.h' file not found");
+      expect(messages[0].severity).toBe('error');
+      expect(messages[0].excerpt).toBe("'nothing.h' file not found");
+      expect(messages[0].location.file).toBe(`${miPath}.c`);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
     });
 
     it('finds a fatal error in "missing_import.cpp"', async () => {
       const editor = await atom.workspace.open(`${miPath}.cpp`);
       const messages = await lint(editor);
       expect(messages.length).toBe(1);
-      expect(messages[0].type).toEqual('fatal error');
-      expect(messages[0].text).toEqual("'nothing.h' file not found");
+      expect(messages[0].severity).toBe('error');
+      expect(messages[0].excerpt).toBe("'nothing.h' file not found");
+      expect(messages[0].location.file).toBe(`${miPath}.cpp`);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
     });
 
     it('finds a fatal error in "missing_import.m"', async () => {
       const editor = await atom.workspace.open(`${miPath}.m`);
       const messages = await lint(editor);
       expect(messages.length).toBe(1);
-      expect(messages[0].type).toEqual('fatal error');
-      expect(messages[0].text).toEqual("'nothing.h' file not found");
+      expect(messages[0].severity).toBe('error');
+      expect(messages[0].excerpt).toBe("'nothing.h' file not found");
+      expect(messages[0].location.file).toBe(`${miPath}.m`);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
     });
 
     it('finds a fatal error in "missing_import.mm"', async () => {
       const editor = await atom.workspace.open(`${miPath}.mm`);
       const messages = await lint(editor);
       expect(messages.length).toBe(1);
-      expect(messages[0].type).toEqual('fatal error');
-      expect(messages[0].text).toEqual("'nothing.h' file not found");
+      expect(messages[0].severity).toBe('error');
+      expect(messages[0].excerpt).toBe("'nothing.h' file not found");
+      expect(messages[0].location.file).toBe(`${miPath}.mm`);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
     });
   });
 });
