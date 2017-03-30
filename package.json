@@ -9,7 +9,43 @@
   },
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">=1.4.0 <2.0.0"
+  },
+  "configSchema": {
+    "executablePath": {
+      "type": "string",
+      "default": "clang"
+    },
+    "clangIncludePaths": {
+      "type": "array",
+      "default": [
+        "."
+      ]
+    },
+    "clangSuppressWarnings": {
+      "type": "boolean",
+      "default": false
+    },
+    "clangDefaultCFlags": {
+      "type": "string",
+      "default": "-Wall"
+    },
+    "clangDefaultCppFlags": {
+      "type": "string",
+      "default": "-Wall -std=c++11"
+    },
+    "clangDefaultObjCFlags": {
+      "type": "string",
+      "default": ""
+    },
+    "clangDefaultObjCppFlags": {
+      "type": "string",
+      "default": ""
+    },
+    "clangErrorLimit": {
+      "type": "integer",
+      "default": 0
+    }
   },
   "scripts": {
     "test": "apm test",
@@ -18,13 +54,13 @@
   "providedServices": {
     "linter": {
       "versions": {
-        "1.0.0": "provideLinter"
+        "2.0.0": "provideLinter"
       }
     }
   },
   "dependencies": {
     "atom-linter": "^9.0.0",
-    "atom-package-deps": "^4.0.1",
+    "atom-package-deps": "^4.5.0",
     "clang-flags": "^0.2.2"
   },
   "devDependencies": {
@@ -34,7 +70,7 @@
     "jasmine-fix": "^1.0.1"
   },
   "package-deps": [
-    "linter"
+    "linter:2.0.0"
   ],
   "eslintConfig": {
     "extends": "airbnb-base",
