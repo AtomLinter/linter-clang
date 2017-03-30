@@ -9,6 +9,14 @@ const lint = require('../lib/main').provideLinter().lint;
 const miPath = join(__dirname, 'files', 'missing_import');
 const poPath = join(__dirname, 'files', 'pragma', 'pragma_once');
 const validPath = join(__dirname, 'files', 'valid.c');
+const fileText = `// This is a comment, this will not return any errors.
+#include "nothing.h"
+
+int main(int argc, char const *argv[]) {
+  /* code */
+  return 0;
+}
+`;
 
 describe('The Clang provider for AtomLinter', () => {
   beforeEach(async () => {
@@ -96,5 +104,19 @@ describe('The Clang provider for AtomLinter', () => {
       const messages = await lint(editor);
       expect(messages.length).toEqual(0);
     });
+  });
+
+  it('works on a modified file', async () => {
+    // Open the valid file
+    const editor = await atom.workspace.open(validPath);
+    // Set the text to invalid text
+    editor.setText(fileText);
+    // Lint the editor
+    const messages = await lint(editor);
+    expect(messages.length).toBe(1);
+    expect(messages[0].severity).toBe('error');
+    expect(messages[0].excerpt).toBe("'nothing.h' file not found");
+    expect(messages[0].location.file).toBe(validPath);
+    expect(messages[0].location.position).toEqual([[1, 9], [1, 20]]);
   });
 });
