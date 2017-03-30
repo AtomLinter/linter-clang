@@ -1,0 +1,19 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/linter-clang
+    docker:
+      - image: walberla/buildenv-ubuntu-clang:4.0
+        environment:
+          DISPLAY: ":99"
+    steps:
+      - run: apt-get update
+      # Install some pre-requisite packages and missing dependencies from the atom package
+      - run: apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
+      # Fire up a VFB to run Atom in
+      - run: /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
+      - checkout
+      # Download and run the (modified) Atom CI script
+      - run: curl -s -O https://raw.githubusercontent.com/Arcanemagus/ci/atomlinter/build-package.sh
+      - run: chmod u+x build-package.sh
+      - run: ./build-package.sh
