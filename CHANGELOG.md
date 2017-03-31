@@ -2,6 +2,14 @@
 
 _`linter-clang` follows [semantic versioning](http://semver.org/)_
 
+## v4.0.0
+
+-   Move to Linter v2
+-   Support linting current editor contents
+-   Run `clang` from the directory of the file being linted
+-   Filter out `#pragma once` warnings from header files
+-   Rename the `execPath` setting to `executablePath` to match other providers
+
 ## v3.4.9
 
 -   Fix declaration of member functions
