@@ -2,6 +2,15 @@
 
 _`linter-clang` follows [semantic versioning](http://semver.org/)_
 
+## v4.1.0
+
+-   Rewrite the parser engine
+-   Disable on change linting if a `.clang-complete` file is in use
+-   Support suggested fixes
+-   Handle multiple ranges from clang, using a merger of all given
+-   Better support for ranges in other files
+-   Much more complete specs
+
 ## v4.0.0
 
 -   Move to Linter v2
