@@ -2,6 +2,10 @@
 
 _`linter-clang` follows [semantic versioning](http://semver.org/)_
 
+## v4.1.1
+
+-   Remove usage of `-fdiagnostics-absolute-paths`, fixing `clang` < v4.0.0
+
 ## v4.1.0
 
 -   Rewrite the parser engine
