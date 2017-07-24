@@ -2,6 +2,10 @@
 
 _`linter-clang` follows [semantic versioning](http://semver.org/)_
 
+## v4.1.2
+
+-   Fix the config key being set when migrating old settings
+
 ## v4.1.1
 
 -   Remove usage of `-fdiagnostics-absolute-paths`, fixing `clang` < v4.0.0
