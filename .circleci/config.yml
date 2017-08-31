@@ -1,19 +1,97 @@
 version: 2
+
+defaults: &defaults
+ working_directory: /tmp/project
+ docker:
+   - image: walberla/buildenv-ubuntu-clang:4.0
+     environment:
+       CIRCLE_BUILD_IMAGE: ubuntu
+       ATOM_CHANNEL: stable
+       DISPLAY: :99
+
 jobs:
-  build:
-    working_directory: ~/linter-clang
-    docker:
-      - image: walberla/buildenv-ubuntu-clang:4.0
-        environment:
-          DISPLAY: ":99"
+  checkout_code:
+    <<: *defaults
     steps:
-      - run: apt-get update
-      # Install some pre-requisite packages and missing dependencies from the atom package
-      - run: apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
-      # Fire up a VFB to run Atom in
-      - run: /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16
       - checkout
-      # Download and run the (modified) Atom CI script
-      - run: curl -s -O https://raw.githubusercontent.com/Arcanemagus/ci/atomlinter/build-package.sh
-      - run: chmod u+x build-package.sh
-      - run: ./build-package.sh
+      - run:
+          name: Download Atom test script
+          command: curl -s -O https://raw.githubusercontent.com/atom/ci/master/build-package.sh
+      - run:
+          name: Make Atom script executable
+          command: chmod u+x build-package.sh
+      # Restore node_modules from the last build
+      - restore_cache:
+          keys:
+          # Get latest cache for this package.json
+          - v2-dependencies-{{ checksum "package.json" }}
+          # Fallback to the last available cache
+          - v2-dependencies
+      # Save project state for next steps
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - project
+
+  stable:
+    <<: *defaults
+    steps:
+      # Restore project state
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Update APT
+          command: apt-get update
+      # Install some pre-requisite packages and missing dependencies from the atom package
+      - run:
+          name: Atom Prerequisites
+          command: apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
+      # Fire up a VFB to run Atom in
+      - run:
+          name: Create VFB for Atom to run in
+          command: /usr/bin/Xvfb $DISPLAY -ac -screen 0 1280x1024x16
+          background: true
+      - run:
+          name: Atom test
+          command: ./build-package.sh
+      # Cache node_modules
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}
+
+  beta:
+    <<: *defaults
+    environment:
+      ATOM_CHANNEL: beta
+    steps:
+      # Restore project state
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Update APT
+          command: apt-get update
+      # Install some pre-requisite packages and missing dependencies from the atom package
+      - run:
+          name: Atom Prerequisites
+          command: apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
+      # Fire up a VFB to run Atom in
+      - run:
+          name: Create VFB for Atom to run in
+          command: /usr/bin/Xvfb $DISPLAY -ac -screen 0 1280x1024x16
+          background: true
+      - run:
+          name: Atom test
+          command: ./build-package.sh
+
+workflows:
+  version: 2
+  test_package:
+    jobs:
+      - checkout_code
+      - stable:
+          requires:
+            - checkout_code
+      - beta:
+          requires:
+            - checkout_code
