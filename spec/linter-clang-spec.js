@@ -1,11 +1,10 @@
 'use babel';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { beforeEach, it } from 'jasmine-fix';
-// Note, when testing if using fit you must import it!
 import { join } from 'path';
+// eslint-disable-next-line no-unused-vars
+import { it, fit, wait, beforeEach, afterEach } from 'jasmine-fix';
 
-const lint = require('../lib/main').provideLinter().lint;
+const { lint } = require('../lib/main').provideLinter();
 
 const miPath = join(__dirname, 'files', 'missing_import');
 const poPath = join(__dirname, 'files', 'pragma', 'pragma_once');
