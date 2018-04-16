@@ -84,6 +84,22 @@ jobs:
           name: Atom test
           command: ./build-package.sh
 
+
+  release:
+    <<: *defaults
+    steps:
+      # Restore project state
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: semantic-release
+          command: npx semantic-release
+      # Cache node_modules
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}
+
 workflows:
   version: 2
   test_package:
@@ -95,3 +111,9 @@ workflows:
       - beta:
           requires:
             - checkout_code
+      - release:
+          requires:
+            - stable
+          filters:
+            branches:
+              only: master
