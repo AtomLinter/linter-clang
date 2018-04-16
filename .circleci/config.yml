@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
  working_directory: /tmp/project
  docker:
-   - image: walberla/buildenv-ubuntu-clang:4.0
+   - image: walberla/buildenv-ubuntu-clang:3.8
      environment:
        CIRCLE_BUILD_IMAGE: ubuntu
        ATOM_CHANNEL: stable
