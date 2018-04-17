@@ -40,7 +40,7 @@ jobs:
           command: sudo apt-get update
       - run:
           name: Install Clang
-          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install clang
+          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install clang-4.0
       # Fire up a VFB to run Atom in
       - run:
           name: Create VFB for Atom to run in
@@ -67,7 +67,7 @@ jobs:
           command: sudo apt-get update
       - run:
           name: Install Clang
-          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install clang
+          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install clang-4.0
       # Fire up a VFB to run Atom in
       - run:
           name: Create VFB for Atom to run in
