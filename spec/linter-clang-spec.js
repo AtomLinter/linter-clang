@@ -43,8 +43,7 @@ describe('The Clang provider for AtomLinter', () => {
       expect(messages[0].severity).toBe('error');
       expect(messages[0].excerpt).toBe("'nothing.h' file not found");
       expect(messages[0].location.file).toBe(`${miPath}.c`);
-      // The Range on clang >= 4.0 is [[1, 9], [1, 20]]
-      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 20]]);
     });
 
     it('finds a fatal error in "missing_import.cpp"', async () => {
@@ -54,8 +53,7 @@ describe('The Clang provider for AtomLinter', () => {
       expect(messages[0].severity).toBe('error');
       expect(messages[0].excerpt).toBe("'nothing.h' file not found");
       expect(messages[0].location.file).toBe(`${miPath}.cpp`);
-      // The Range on clang >= 4.0 is [[1, 9], [1, 20]]
-      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 20]]);
     });
 
     it('finds a fatal error in "missing_import.m"', async () => {
@@ -65,8 +63,7 @@ describe('The Clang provider for AtomLinter', () => {
       expect(messages[0].severity).toBe('error');
       expect(messages[0].excerpt).toBe("'nothing.h' file not found");
       expect(messages[0].location.file).toBe(`${miPath}.m`);
-      // The Range on clang >= 4.0 is [[1, 9], [1, 20]]
-      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 20]]);
     });
 
     it('finds a fatal error in "missing_import.mm"', async () => {
@@ -76,8 +73,7 @@ describe('The Clang provider for AtomLinter', () => {
       expect(messages[0].severity).toBe('error');
       expect(messages[0].excerpt).toBe("'nothing.h' file not found");
       expect(messages[0].location.file).toBe(`${miPath}.mm`);
-      // The Range on clang >= 4.0 is [[1, 9], [1, 20]]
-      expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
+      expect(messages[0].location.position).toEqual([[1, 9], [1, 20]]);
     });
   });
 
@@ -126,8 +122,7 @@ describe('The Clang provider for AtomLinter', () => {
     expect(messages[0].severity).toBe('error');
     expect(messages[0].excerpt).toBe("'nothing.h' file not found");
     expect(messages[0].location.file).toBe(validPath);
-    // The Range on clang >= 4.0 is [[1, 9], [1, 20]]
-    expect(messages[0].location.position).toEqual([[1, 9], [1, 17]]);
+    expect(messages[0].location.position).toEqual([[1, 9], [1, 20]]);
   });
 
   it('handles multiple ranges', async () => {
