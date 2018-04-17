@@ -3,11 +3,7 @@ version: 2
 defaults: &defaults
  working_directory: /tmp/project
  docker:
-   - image: walberla/buildenv-ubuntu-clang:4.0
-     environment:
-       CIRCLE_BUILD_IMAGE: ubuntu
-       ATOM_CHANNEL: stable
-       DISPLAY: :99
+   - image: arcanemagus/atom-docker-ci:stable
 
 jobs:
   checkout_code:
@@ -41,11 +37,10 @@ jobs:
           at: /tmp
       - run:
           name: Update APT
-          command: apt-get update
-      # Install some pre-requisite packages and missing dependencies from the atom package
+          command: sudo apt-get update
       - run:
-          name: Atom Prerequisites
-          command: apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
+          name: Install Clang
+          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install clang-4.0
       # Fire up a VFB to run Atom in
       - run:
           name: Create VFB for Atom to run in
@@ -62,19 +57,17 @@ jobs:
 
   beta:
     <<: *defaults
-    environment:
-      ATOM_CHANNEL: beta
+    image: arcanemagus/atom-docker-ci:beta
     steps:
       # Restore project state
       - attach_workspace:
           at: /tmp
       - run:
           name: Update APT
-          command: apt-get update
-      # Install some pre-requisite packages and missing dependencies from the atom package
+          command: sudo apt-get update
       - run:
-          name: Atom Prerequisites
-          command: apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install sudo xvfb libxss1 libasound2
+          name: Install Clang
+          command: sudo apt-get --assume-yes --quiet --no-install-suggests --no-install-recommends install clang-4.0
       # Fire up a VFB to run Atom in
       - run:
           name: Create VFB for Atom to run in
@@ -83,6 +76,22 @@ jobs:
       - run:
           name: Atom test
           command: ./build-package.sh
+
+
+  release:
+    <<: *defaults
+    steps:
+      # Restore project state
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: semantic-release
+          command: npx semantic-release
+      # Cache node_modules
+      - save_cache:
+          paths:
+            - node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}
 
 workflows:
   version: 2
@@ -95,3 +104,9 @@ workflows:
       - beta:
           requires:
             - checkout_code
+      - release:
+          requires:
+            - stable
+          filters:
+            branches:
+              only: master
