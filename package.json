@@ -1,6 +1,7 @@
 {
   "name": "linter-clang",
   "main": "./lib/main",
+  "private": true,
   "version": "4.1.2",
   "description": "Lint C-based files using clang",
   "repository": {
@@ -72,6 +73,21 @@
   "package-deps": [
     "linter:2.0.0"
   ],
+  "renovate": {
+    "extends": [
+      "config:base"
+    ],
+    "semanticCommits": true,
+    "rangeStrategy": "pin",
+    "packageRules": [
+      {
+        "packagePatterns": [
+          "^eslint"
+        ],
+        "groupName": "ESLint packages"
+      }
+    ]
+  },
   "eslintConfig": {
     "extends": "airbnb-base",
     "rules": {
